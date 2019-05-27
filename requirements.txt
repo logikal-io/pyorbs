@@ -1,0 +1,16 @@
+############################## Testing
+flake8==3.7.7
+pytest==4.4.2
+pytest-cov==2.7.1
+pytest-flake8==1.0.4
+pytest-mock==1.10.4
+
+############################## Documentation
+Sphinx==2.0.1
+sphinx-rtd-theme==0.4.3
+
+############################## Packaging
+bump2version==0.5.10
+setuptools==41.0.1
+wheel==0.33.4
+twine==1.13.0
