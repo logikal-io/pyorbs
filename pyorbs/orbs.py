@@ -1,12 +1,12 @@
-import venv
+import sys
 import tempfile
-from os import getcwd, walk, remove, environ
+from os import path, getcwd, walk, remove, environ
 from pathlib import Path
 from os.path import exists, isdir, join
 from shutil import rmtree
 
 from pyorbs.templates import render
-from pyorbs.shell import execute, current_shell_type, SHELLS
+from pyorbs.shell import execute, current_shell_type, SHELLS, which
 from pyorbs.reqs import Requirements
 
 
@@ -21,12 +21,13 @@ class Orbs:
         print('Available orbs:\n' + '\n'.join(orbs) if orbs else 'There are no orbs')
 
     @staticmethod
-    def freeze(reqs):
+    def freeze(reqs, executable=sys.executable):
         """
         Freeze the requirements files in a given path.
 
         Args:
             reqs (str): The path to the requirements files.
+            executable (str): The Python executable to use.
 
         """
         if not exists(reqs):
@@ -39,7 +40,8 @@ class Orbs:
             if reqs.changed:
                 print('Freezing requirements \'%s\'...' % reqs.path)
                 with tempfile.TemporaryDirectory(prefix='pyorbs-') as tmp_path:
-                    Orbs(tmp_path).orb(name='frozen', new=True).make(reqs, quiet=True, update=True)
+                    orb = Orbs(tmp_path).orb(name='frozen', new=True)
+                    orb.make(reqs, executable, quiet=True, update=True)
             else:
                 print('Requirements lockfile of \'%s\' is up-to-date' % reqs.path)
 
@@ -104,23 +106,29 @@ class Orb:
     def orb(self, shell_type=current_shell_type()):
         return join(self._orbs.path, self.name, 'bin/activate_orb') + '.' + shell_type
 
-    def make(self, reqs, quiet=False, update=False):
+    def make(self, reqs, executable=sys.executable, quiet=False, update=False):
         """
         Create or update the orb and generate a lockfile when necessary.
 
         Args:
             reqs (Requirements): The requirements to be used for package installation.
+            executable (str): The Python executable to use.
             quiet (bool): Whether to suppress info messages.
             update (bool): Whether to update the orb including the relevant lockfile.
 
         """
+        executable = path.realpath(which(executable))
         if not update and exists(reqs.locked) and reqs.changed:
             raise RuntimeError('Requirements lockfile of \'%s\' is out-of-date' % reqs.path)
         if not quiet:
             verb = 'Updating' if update else 'Making'
             print('%s orb \'%s\' using \'%s\'...' % (verb, self.name, reqs))
+            print('Python executable: %s' % executable)
 
-        venv.create(join(self._orbs.path, self.name), clear=True, with_pip=True)
+        # Creating virtual environment
+        command = '%s -m venv --clear "%s"' % (executable, join(self._orbs.path, self.name))
+        if execute(command=command).returncode:
+            raise RuntimeError('Unable to create virtual environment')
 
         # Creating activation scripts
         for shell in SHELLS:

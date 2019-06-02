@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from pytest import fixture, raises
 
 from pyorbs.orbs import Orbs
@@ -27,7 +29,6 @@ def make_actions(mocker):
     execute.return_value.returncode = 0
     mocker.patch('pyorbs.orbs.Orb.activate')
     return {
-        'create_env': mocker.patch('pyorbs.orbs.venv.create'),
         'write_text': mocker.patch('pyorbs.orbs.Path.write_text'),
         'execute': execute,
         'lock_reqs': mocker.patch('pyorbs.reqs.Requirements.lock')
@@ -108,16 +109,23 @@ def test_make_reqs_changed(orbs, reqs):
         orbs.orb('test').make(reqs('changed'))
 
 
+def test_make_venv_error(mocker, make_actions, orbs, reqs):
+    mocker.patch('pyorbs.orbs.execute').return_value.returncode = 1
+    with raises(RuntimeError):
+        orbs.orb('test').make(reqs())
+
+
 def test_make_install_error(mocker, make_actions, orbs, reqs):
-    execute = mocker.patch('pyorbs.orbs.execute')
-    execute.return_value.returncode = 1
+    mocker.patch('pyorbs.orbs.execute', side_effect=[
+        namedtuple('CompletedProcess', 'returncode')(0),
+        namedtuple('CompletedProcess', 'returncode')(1),
+    ])
     with raises(RuntimeError):
         orbs.orb('test').make(reqs())
 
 
 def test_make(make_actions, orbs, reqs):
     orbs.orb('test').make(reqs())
-    assert make_actions['create_env'].called
     assert make_actions['write_text'].called
     assert make_actions['execute'].called
     assert not make_actions['lock_reqs'].called

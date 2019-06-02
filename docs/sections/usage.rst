@@ -22,9 +22,9 @@ does not exist yet (based on ``requirements.txt`` by default).
 .. tip:: The orb storage folder can be specified for any orb action using the ``--orbs`` or ``-o``
     option.
 
-Specifying a different orb storage folder and requirements file can be done as::
+Specifying a different orb storage folder, requirements file and Python executable can be done as::
 
-    $ orb -m magic -o ~/.virtualenvs -r requirements/airflow.txt
+    $ orb -m magic -o ~/.virtualenvs -r requirements/airflow.txt -e python3.7
 
 
 Listing & Destroying Orbs
@@ -75,7 +75,8 @@ files that are further required within the appropriate requirements files using 
     requirements files which is stored in the header of each lockfile.
 
 In case you only want to generate or re-generate lockfiles you can use the ``orb --freeze`` or
-``orb -f`` command.
+``orb -f`` command. You can also specify the Python executable with this command when necessary
+using the ``-e`` or ``--exec`` option.
 
 .. tip:: You can freeze multiple requirements files in one run by specifying a folder instead of a
     single file with the ``--reqs`` or ``-r`` option. This can be useful when you need to manage

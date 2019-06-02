@@ -7,15 +7,10 @@ from pathlib import Path
 from pytest import fixture
 
 from pyorbs.app import __version__
-from pyorbs.shell import SHELLS, current_shell_type
+from pyorbs.shell import SHELLS, which, current_shell_type
 
 
-def shell_paths():
-    return [run(['which', shell], stdout=PIPE, universal_newlines=True, check=True).stdout.strip()
-            for shell in SHELLS]
-
-
-@fixture(autouse=True, params=shell_paths())
+@fixture(autouse=True, params=[which(shell) for shell in SHELLS])
 def shells(monkeypatch, request):
     monkeypatch.setenv('SHELL', request.param)
 
@@ -49,7 +44,7 @@ def test_version(orb):
 
 
 def test_make(orb, tmp_path, tmp_reqs, reqs):
-    orb(['-m', 'test_orb', '-r', tmp_reqs()])  # make
+    orb(['-m', 'test_orb', '-r', tmp_reqs(), '-e', 'python3'])  # make
     assert lockfiles_equal(tmp_reqs() + '.lock', reqs(raw=True) + '.lock')  # lockfile
     assert exists(str(tmp_path / 'test_orb/bin/activate_orb') + '.' + current_shell_type())
 

@@ -42,3 +42,13 @@ def execute(init=None, command=None, replace=False, capture=False):
         return run([shell] + args, stdout=PIPE, stderr=PIPE, universal_newlines=True)
     else:
         return run([shell] + args)
+
+
+def which(command):
+    """
+    Returns the absolute path of the given command.
+    """
+    which = run(['which', command], stdout=PIPE, universal_newlines=True)
+    if which.returncode:
+        raise ValueError('Command \'%s\' not found' % command)
+    return which.stdout.strip()

@@ -38,6 +38,8 @@ def main(args=sys.argv[1:]):
                         help='command to be run after orb activation')
     parser.add_argument('-r', '--reqs', default='requirements.txt', metavar='X',
                         help='path to the requirements (default: requirements.txt)')
+    parser.add_argument('-e', '--exec', default=sys.executable, metavar='X',
+                        help='Python executable to use (default: sys.executable)')
     parser.add_argument('-o', '--orbs', default=os.path.expanduser('~/.pyorbs'), metavar='X',
                         help='orb storage directory (default: ~/.pyorbs)')
     parser.add_argument('-n', '--no-cd', action='store_true', help='do not change directory')
@@ -49,13 +51,13 @@ def main(args=sys.argv[1:]):
         if args.list:
             orbs.list()
         elif args.make:
-            orbs.orb(args.name, new=True).make(Requirements(args.reqs, bare=args.bare))
+            orbs.orb(args.name, new=True).make(Requirements(args.reqs, args.bare), args.exec)
         elif args.update:
-            orbs.orb(args.name).make(Requirements(args.reqs, bare=args.bare), update=True)
+            orbs.orb(args.name).make(Requirements(args.reqs, args.bare), args.exec, update=True)
         elif args.destroy:
             orbs.orb(args.name).destroy()
         elif args.freeze:
-            orbs.freeze(args.reqs)
+            orbs.freeze(args.reqs, args.exec)
         elif args.glow:
             orbs.toggle_glow(args.name)
         elif args.version:

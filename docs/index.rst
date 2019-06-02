@@ -46,16 +46,13 @@ There are a few good things about pyorbs:
 - Straightforward behavior using only `pip <https://pip.pypa.io/en/stable/>`_ and the now-standard
   :mod:`venv` under the hood.
 - Supports `bash <https://www.gnu.org/software/bash/>`_ and `fish <https://fishshell.com/>`_
-  shells.
-- Works reasonably well with `tmux <https://github.com/tmux/tmux/wiki>`_. Yay.
+  shells and works reasonably well with `tmux <https://github.com/tmux/tmux/wiki>`_. Yay.
 
 Limitations
 -----------
 There are also a few bad things about pyorbs:
 
-- Does not work if you don't have at least Python 3.5 installed.
-- Does not allow for specifying the Python interpreter to be used in a virtual environment.
-- Does not support therefore Python 2 virtual environments at the moment.
+- Does not support Python 2 virtual environments.
 - Does not work with zsh, csh or tcsh shells.
 - May not work with fish in some cases due to `this bug <https://bugs.python.org/issue26664>`_ in
   Python's :mod:`venv`.

@@ -1,6 +1,6 @@
 from pytest import raises
 
-from pyorbs.shell import SHELLS, execute, current_shell_type
+from pyorbs.shell import SHELLS, current_shell_type, execute, which
 
 
 def test_current_shell_type(monkeypatch):
@@ -40,3 +40,12 @@ def test_execute_errors():
         execute(init='test', command='test')
     with raises(ValueError):
         execute(replace=True, capture=True)
+
+
+def test_which():
+    assert 'which' in which('which')
+
+
+def test_which_error():
+    with raises(ValueError):
+        which('UtTZY9GLiG2tToRlg9q3')  # invalid command
