@@ -25,6 +25,7 @@ setuptools.setup(
     python_requires='>=3.5',
     install_requires=[],
     packages=setuptools.find_packages(exclude=['docs*', 'tests*']),
+    package_data={'pyorbs': ['templates/*']},
     license='MIT',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
