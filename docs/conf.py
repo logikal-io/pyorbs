@@ -19,7 +19,7 @@ highlight_language = 'console'
 
 # Options for HTML output
 html_theme = 'sphinx_rtd_theme'
-html_theme_options = {'canonical_url': '%s/%s/' % (app.__urls__['docs'], app.__version__)}
+html_theme_options = {'canonical_url': '%s/docs/%s/' % (app.__urls__['docs'], app.__version__)}
 html_static_path = ['_static']
 html_favicon = '_static/favicon.png'
 html_show_sourcelink = False

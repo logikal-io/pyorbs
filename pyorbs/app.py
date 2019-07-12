@@ -14,7 +14,7 @@ __author__ = 'Webrepublic AG'
 __author_email__ = 'tech@webrepublic.ch'
 __maintainer__ = 'Webrepublic AG'
 __maintainer_email__ = 'tech@webrepublic.ch'
-__keywords__ = 'virtual environment development'
+__keywords__ = 'development virtual environment'
 __urls__ = {
     'docs': 'https://pyorbs.wbrp.ch',
     'source': 'https://github.com/wbrp/pyorbs',
