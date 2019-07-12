@@ -9,12 +9,12 @@ from pyorbs.orbs import Orbs
 from pyorbs.reqs import Requirements
 
 __name__ = 'pyorbs'
-__version__ = '1.0.0'
+__version__ = '0.0.0'
 __author__ = 'Webrepublic AG'
 __author_email__ = 'tech@webrepublic.ch'
 __maintainer__ = 'Webrepublic AG'
 __maintainer_email__ = 'tech@webrepublic.ch'
-__keywords__ = 'virtual environment development'
+__keywords__ = 'development virtual environment'
 __urls__ = {
     'docs': 'https://pyorbs.wbrp.ch',
     'source': 'https://github.com/wbrp/pyorbs',

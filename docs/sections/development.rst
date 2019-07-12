@@ -26,6 +26,15 @@ principles:
 
 * Live the `Zen of Python <https://www.python.org/dev/peps/pep-0020/>`_.
 
+Coding Style
+------------
+When writing code you should always follow the `PEP8 Style Guide
+<https://www.python.org/dev/peps/pep-0008/>`_ with the following exceptions:
+
+* Each line should be less than 100 characters long.
+* You should use `Google-style docstrings <https://google.github.io/styleguide/pyguide.html>`_
+  starting on the second line.
+
 Development Environment
 -----------------------
 You can manage the development environment of pyorbs with pyorbs itself. If you already have pyorbs
@@ -46,15 +55,6 @@ You should increment the version number according to the `semantic versioning ru
 to `document your changes <https://keepachangelog.com/en/>`_ in the
 :ref:`sections/changelog:Changelog` as well.
 
-Coding Style
-------------
-When writing code you should always follow the `PEP8 Style Guide
-<https://www.python.org/dev/peps/pep-0008/>`_ with the following exceptions:
-
-* Each line should be less than 100 characters long.
-* You should use `Google-style docstrings <https://google.github.io/styleguide/pyguide.html>`_
-  starting on the second line.
-
 Testing
 -------
 The codebase is tested using the `pytest <https://docs.pytest.org/en/latest/>`_ framework. All
@@ -72,12 +72,12 @@ modified or expanded by changing the source files in the ``docs`` folder. In ord
 documentation just execute ``make`` inside this folder while the ``pyorbs`` orb is
 active.
 
-Continuous Delivery
--------------------
-You generally do not have to worry about this too much, as the continuous delivery system is
+Continuous Deployment
+---------------------
+You generally do not have to worry about this too much, as the continuous deployment system is
 maintained by `Webrepublic <https://webrepublic.com/en/>`_'s software engineering team. We use
-`Jenkins <https://jenkins.io/>`_ for orchestrating the various tasks necessary for publishing this
-package:
+`Concourse <https://concourse-ci.org>`_ for orchestrating the various tasks necessary for
+publishing this package:
 
 * Testing of GitHub pull requests after each new commit.
 * Package and documentation building and publication upon successful merging into the ``master``
