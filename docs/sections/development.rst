@@ -75,7 +75,7 @@ active.
 Continuous Deployment
 ---------------------
 You generally do not have to worry about this too much, as the continuous deployment system is
-maintained by `Webrepublic <https://webrepublic.com/en/>`_'s software engineering team. We use
+maintained by `Webrepublic <https://webrepublic.com/en/>`_'s Data & Technology department. We use
 `Concourse <https://concourse-ci.org>`_ for orchestrating the various tasks necessary for
 publishing this package:
 
@@ -95,5 +95,5 @@ uploading it to PyPI.
 
 Maintenance
 -----------
-This package is currently maintained by the `Webrepublic <https://webrepublic.com/en/>`_ software
-engineering team.
+This package is currently maintained by the `Webrepublic <https://webrepublic.com/en/>`_ Data &
+Technology department.
