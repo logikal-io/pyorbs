@@ -15,7 +15,7 @@ aims at making this process simpler.
 
 Using pyorbs is easy. You install it::
 
-    $ pip install pyorbs
+    $ pip3 install pyorbs
 
 then create a new orb in your project folder::
 
