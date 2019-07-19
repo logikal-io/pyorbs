@@ -9,7 +9,7 @@ from pyorbs.orbs import Orbs
 from pyorbs.reqs import Requirements
 
 __name__ = 'pyorbs'
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 __author__ = 'Webrepublic AG'
 __author_email__ = 'tech@webrepublic.ch'
 __maintainer__ = 'Webrepublic AG'
