@@ -77,11 +77,8 @@ Continuous Deployment
 You generally do not have to worry about this too much, as the continuous deployment system is
 maintained by `Webrepublic <https://webrepublic.com/en/>`_'s Data & Technology department. We use
 `Concourse <https://concourse-ci.org>`_ for orchestrating the various tasks necessary for
-publishing this package:
-
-* Testing of GitHub pull requests after each new commit.
-* Package and documentation building and publication upon successful merging into the ``master``
-  branch.
+publishing this package, including building and updating the documentation upon successful merging
+into the ``master`` branch.
 
 In case hell breaks loose and you must publish pyorbs manually, do this::
 
@@ -90,8 +87,8 @@ In case hell breaks loose and you must publish pyorbs manually, do this::
     $ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
     $ twine upload dist/*
 
-Do not forget to check your distribution on `test.pypi.org <https://test.pypi.org>`_ before
-uploading it to PyPI.
+Do not forget to `check your distribution <https://packaging.python.org/guides/using-testpypi/>`_
+on `test.pypi.org <https://test.pypi.org>`_ before uploading it to PyPI.
 
 Maintenance
 -----------

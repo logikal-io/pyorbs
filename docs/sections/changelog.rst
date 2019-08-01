@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.2 (2019-08-01)
+------------------
+*Changed:*
+
+- Files with a name starting with a dot are skipped when freezing a folder.
+
 1.0.1 (2019-07-19)
 ------------------
 *Added:*

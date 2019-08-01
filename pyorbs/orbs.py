@@ -32,8 +32,11 @@ class Orbs:
         """
         if not exists(reqs):
             raise ValueError('Requirements path \'%s\' not found' % reqs)
-        reqs_list = [Requirements(join(reqs, reqs_file)) for reqs_file in next(walk(reqs))[2]
-                     if not reqs_file.endswith('.lock')] if isdir(reqs) else [Requirements(reqs)]
+        if isdir(reqs):
+            reqs_list = [Requirements(join(reqs, reqs_file)) for reqs_file in next(walk(reqs))[2]
+                         if not (reqs_file.endswith('.lock') or reqs_file.startswith('.'))]
+        else:
+            reqs_list = [Requirements(reqs)]
         if not reqs_list:
             raise ValueError('There are no requirements files in path \'%s\'' % reqs)
         for reqs in reqs_list:
