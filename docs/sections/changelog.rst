@@ -1,6 +1,16 @@
 Changelog
 =========
 
+1.0.3 (2019-08-09)
+------------------
+*Added:*
+
+- Dockerfiles of our public Docker Hub images.
+
+*Changed:*
+
+- Moved the software development principles documentation to a separate repository.
+
 1.0.2 (2019-08-01)
 ------------------
 *Changed:*
