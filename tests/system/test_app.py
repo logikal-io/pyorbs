@@ -76,11 +76,12 @@ def test_freeze(orb, tmp_reqs, reqs):
     assert lockfiles_equal(tmp_reqs() + '.lock', reqs(raw=True) + '.lock')  # lockfile
 
 
-def test_freeze_request_changed(orb, tmp_reqs, reqs):
-    tmp_reqs('changed')  # copy requested
-    orb(['-f', '-r', tmp_reqs('request_changed')])  # freeze
-    assert lockfiles_equal(tmp_reqs('request_changed') + '.lock',
-                           reqs('request_unchanged', raw=True) + '.lock')  # lockfile
+def test_freeze_referred(orb, tmp_reqs, reqs):
+    tmp_reqs('changed')  # copy requirements / constraints file
+    for check in ('referred_requirements', 'referred_constraints'):
+        orb(['-f', '-r', tmp_reqs('%s_changed' % check)])  # freeze
+        assert lockfiles_equal(tmp_reqs('%s_changed' % check) + '.lock',
+                               reqs('%s_unchanged' % check, raw=True) + '.lock')  # lockfile
 
 
 def test_glow(monkeypatch, orb, reqs):

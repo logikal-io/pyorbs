@@ -29,8 +29,8 @@ class Requirements:
         self.path = path
         self.locked = path + '.lock'
         self._bare = bare
-        self._hash = self._get_hash() if not bare else None
-        self.changed = not bare and self._hash != self._get_stored_hash()
+        self._hash, self._options = self._lockfile_context() if not bare else (None, None)
+        self.changed = not bare and self._hash != self._stored_hash()
 
     def __str__(self):
         """
@@ -43,28 +43,31 @@ class Requirements:
         Updates the lockfile using the provided frozen requirements.
         """
         header = render('lockfile_header', {'reqs': self.path, 'hash': self._hash})
-        Path(self.locked).write_text(header + frozen)
+        Path(self.locked).write_text(header + '\n'.join(self._options + [frozen]))
         print('Frozen requirements are written to \'%s\'' % self.locked)
 
-    def _get_hash(self):
+    def _lockfile_context(self):
         """
-        Returns the SHA-256 hash of the concatenated requirements files.
+        Returns a tuple with the SHA-256 hash of the concatenated requirements files and the list
+        of additional options used in the requirements files.
         """
-        result = hashlib.sha256()
+        hash_value = hashlib.sha256()
+        options = []
         done = OrderedDict([(self.path, False)])
         while not all(done.values()):
             reqs = [r for r, p in done.items() if not p][0]
             if not exists(reqs):
-                raise RuntimeError('Requirements file \'%s\' not found (required by \'%s\')' %
+                raise RuntimeError('Requirements file \'%s\' not found (referenced by \'%s\')' %
                                    (reqs, self.path))
             text = Path(reqs).read_text()
-            result.update(text.encode())
-            done.update([(join(dirname(reqs), r), False) for r in re.findall(r'-r (.*)', text)
+            hash_value.update(text.encode())
+            options += re.findall(r'(-[^rc].*)', text)
+            done.update([(join(dirname(reqs), r), False) for r in re.findall(r'-[rc] (.*)', text)
                          if join(dirname(reqs), r) not in done])
             done[reqs] = True
-        return result.hexdigest()
+        return hash_value.hexdigest(), options
 
-    def _get_stored_hash(self):
+    def _stored_hash(self):
         """
         Returns the stored hash from the lockfile or None if no lockfile or hash is found.
         """

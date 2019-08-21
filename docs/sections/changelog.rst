@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.0 (2019-08-21)
+------------------
+*Added:*
+
+- Support for constraints files and additional options in requirements files.
+
 1.0.3 (2019-08-09)
 ------------------
 *Added:*

@@ -16,8 +16,9 @@ def test_reqs(reqs):
     assert str(reqs('changed')) == reqs('changed', raw=True)
     assert reqs('new').changed
     assert str(reqs('new')) == reqs('new', raw=True)
-    assert reqs('request_changed').changed
-    assert str(reqs('request_changed')) == reqs('request_changed', raw=True)
+    for check in ('referred_requirements_changed', 'referred_constraints_changed'):
+        assert reqs(check).changed
+        assert str(reqs(check)) == reqs(check, raw=True)
     assert not reqs().changed
     assert str(reqs()) == reqs().locked
 
