@@ -69,10 +69,11 @@ lockfile as follows::
 
 This will re-create the ``magic`` orb (using ``requirements.txt`` by default) and trigger a
 re-generation of the requirements lockfile if the requirements changed. This includes changes to
-files that are further required within the appropriate requirements files using the ``-r`` option.
+files that are further specified within the appropriate requirements files using the ``-r`` or
+``-c`` options.
 
 .. note:: Whether a lockfile is out-of-date is assessed using a hash of the concatenated
-    requirements files which is stored in the header of each lockfile.
+    requirements and constraints files which is stored in the header of each lockfile.
 
 In case you only want to generate or re-generate lockfiles you can use the ``orb --freeze`` or
 ``orb -f`` command. You can also specify the Python executable with this command when necessary
