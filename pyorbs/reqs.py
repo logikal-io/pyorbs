@@ -61,8 +61,9 @@ class Requirements:
                                    (reqs, self.path))
             text = Path(reqs).read_text()
             hash_value.update(text.encode())
-            options += re.findall(r'(-[^rc].*)', text)
-            done.update([(join(dirname(reqs), r), False) for r in re.findall(r'-[rc] (.*)', text)
+            options += re.findall(r'^(-[^rc].*)$', text, re.MULTILINE)
+            done.update([(join(dirname(reqs), r), False)
+                         for r in re.findall(r'^-[rc] (.*)$', text, re.MULTILINE)
                          if join(dirname(reqs), r) not in done])
             done[reqs] = True
         return hash_value.hexdigest(), options
