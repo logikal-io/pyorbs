@@ -109,17 +109,17 @@ def test_make_reqs_changed(orbs, reqs):
         orbs.orb('test').make(reqs('changed'))
 
 
-def test_make_venv_error(mocker, make_actions, orbs, reqs):
-    mocker.patch('pyorbs.orbs.execute').return_value.returncode = 1
+def test_make_venv_error(make_actions, orbs, reqs):
+    make_actions['execute'].return_value.returncode = 1
     with raises(RuntimeError):
         orbs.orb('test').make(reqs())
 
 
-def test_make_install_error(mocker, make_actions, orbs, reqs):
-    mocker.patch('pyorbs.orbs.execute', side_effect=[
+def test_make_install_error(make_actions, orbs, reqs):
+    make_actions['execute'].side_effect = [
         namedtuple('CompletedProcess', 'returncode')(0),
         namedtuple('CompletedProcess', 'returncode')(1),
-    ])
+    ]
     with raises(RuntimeError):
         orbs.orb('test').make(reqs())
 
@@ -145,6 +145,7 @@ def test_make_quiet(mocker, make_actions, orbs, reqs):
     mocked_print = mocker.patch('builtins.print')
     orbs.orb('test').make(reqs(), quiet=True)
     assert not mocked_print.called
+    assert not make_actions['lock_reqs'].called
 
 
 def test_destroy_exit(monkeypatch, orbs):

@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-import setuptools
 import pathlib
+
+import setuptools
 
 from pyorbs import app
 
 
 setuptools.setup(
-    name=app.__name__,
+    name=app.__project__,
     version=app.__version__,
     author=app.__author__,
     author_email=app.__author_email__,

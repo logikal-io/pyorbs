@@ -1,38 +1,33 @@
 Changelog
 =========
 
-1.1.0 (2019-08-21)
-------------------
-*Added:*
+We document changes in line with the `"keep a changelog" principles
+<https://keepachangelog.com/en/1.1.0/>`_.
 
-- Support for constraints files and additional options in requirements files.
+You can find the release dates on `GitHub <https://github.com/wbrp/pyorbs/releases>`__.
 
-1.0.3 (2019-08-09)
-------------------
-*Added:*
+1.2.0
+-----
+- *Added:* Option for testing whether requirements files are up-to-date.
 
-- Dockerfiles of our public Docker Hub images.
+1.1.0
+-----
+- *Added:* Support for constraints files and additional options in requirements files.
 
-*Changed:*
+1.0.3
+-----
+- *Added:* Dockerfiles of our public Docker Hub images.
+- *Changed:* Moved the software development principles documentation to a separate repository.
 
-- Moved the software development principles documentation to a separate repository.
+1.0.2
+-----
+- *Changed:* Files with a name starting with a dot are skipped when freezing a folder.
 
-1.0.2 (2019-08-01)
-------------------
-*Changed:*
+1.0.1
+-----
+- *Added:* Information about the public Docker Hub images.
+- *Changed:* Replaced ``pip`` with ``pip3`` in the installation documentation.
 
-- Files with a name starting with a dot are skipped when freezing a folder.
-
-1.0.1 (2019-07-19)
-------------------
-*Added:*
-
-- Information about the public Docker Hub images.
-
-*Changed:*
-
-- Replaced ``pip`` with ``pip3`` in the installation documentation.
-
-1.0.0 (2019-07-12)
-------------------
+1.0.0
+-----
 - Launched pyorbs.

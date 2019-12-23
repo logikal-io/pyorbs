@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath('..'))
 from pyorbs import app
 
 # Project information
-project = app.__name__
+project = app.__project__
 copyright = app.__author__
 author = app.__author__
 version = app.__version__

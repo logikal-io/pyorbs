@@ -84,6 +84,13 @@ def test_freeze_referred(orb, tmp_reqs, reqs):
                                reqs('%s_unchanged' % check, raw=True) + '.lock')  # lockfile
 
 
+def test_test(orb, reqs):
+    assert orb(['-t', '-r', reqs(raw=True)], check=False).returncode == 0
+    assert orb(['-t', '-r', reqs('changed', raw=True)], check=False).returncode == 1
+    for check in ('referred_requirements', 'referred_constraints'):
+        assert orb(['-t', '-r', reqs('%s_changed' % check, raw=True)], check=False).returncode == 1
+
+
 def test_glow(monkeypatch, orb, reqs):
     monkeypatch.delenv('PYORBS_ACTIVE_ORB', raising=False)
     assert 'No orb' in orb(['-g']).stdout  # no orb is glowing by default

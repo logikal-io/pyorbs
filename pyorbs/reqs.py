@@ -25,7 +25,7 @@ class Requirements:
 
         """
         if not exists(path) or not isfile(path):
-            raise ValueError('Invalid requirements file \'%s\'' % path)
+            raise ValueError('Invalid requirements file "%s"' % path)
         self.path = path
         self.locked = path + '.lock'
         self._bare = bare
@@ -44,7 +44,7 @@ class Requirements:
         """
         header = render('lockfile_header', {'reqs': self.path, 'hash': self._hash})
         Path(self.locked).write_text(header + '\n'.join(self._options + [frozen]))
-        print('Frozen requirements are written to \'%s\'' % self.locked)
+        print('Frozen requirements are written to "%s"' % self.locked)
 
     def _lockfile_context(self):
         """
@@ -57,7 +57,7 @@ class Requirements:
         while not all(done.values()):
             reqs = [r for r, p in done.items() if not p][0]
             if not exists(reqs):
-                raise RuntimeError('Requirements file \'%s\' not found (referenced by \'%s\')' %
+                raise RuntimeError('Requirements file "%s" not found (referenced by "%s")' %
                                    (reqs, self.path))
             text = Path(reqs).read_text()
             hash_value.update(text.encode())
