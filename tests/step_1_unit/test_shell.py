@@ -20,7 +20,7 @@ def test_execute(monkeypatch, mocker):
         monkeypatch.setenv('SHELL', shell)
         run = mocker.patch('pyorbs.shell.run')
         execute()
-        run.assert_called_with([shell])
+        run.assert_called_with([shell], check=False)
 
 
 def test_execute_replace(mocker):

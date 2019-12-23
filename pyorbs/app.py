@@ -8,7 +8,7 @@ import argparse
 from pyorbs.orbs import Orbs
 from pyorbs.reqs import Requirements
 
-__name__ = 'pyorbs'
+__project__ = 'pyorbs'
 __version__ = '1.1.0'
 __author__ = 'Webrepublic AG'
 __author_email__ = 'tech@webrepublic.ch'
@@ -22,7 +22,7 @@ __urls__ = {
 }
 
 
-def main(args=sys.argv[1:]):
+def main(args=tuple(sys.argv[1:])):
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_argument_group(title='actions').add_mutually_exclusive_group()
     group.add_argument('-a', '--activate', action='store_true', help='activate an orb (default)')
@@ -31,6 +31,7 @@ def main(args=sys.argv[1:]):
     group.add_argument('-u', '--update', action='store_true', help='update an orb')
     group.add_argument('-d', '--destroy', action='store_true', help='destroy an orb')
     group.add_argument('-f', '--freeze', action='store_true', help='freeze requirements')
+    group.add_argument('-t', '--test', action='store_true', help='test requirements')
     group.add_argument('-g', '--glow', action='store_true', help='toggle orb glow')
     parser.add_argument('name', nargs='?', help='name of the orb (default: glowing orb name)')
     parser.add_argument('-v', '--version', action='store_true', help='show version')
@@ -58,13 +59,16 @@ def main(args=sys.argv[1:]):
             orbs.orb(args.name).destroy()
         elif args.freeze:
             orbs.freeze(args.reqs, args.exec)
+        elif args.test:
+            return orbs.test(args.reqs)
         elif args.glow:
             orbs.toggle_glow(args.name)
         elif args.version:
             print(__version__)
         else:
             orbs.orb(args.name, shell=args.shell).activate(run=args.command, no_cd=args.no_cd)
+        return 0
     except KeyboardInterrupt:
-        return ''
-    except Exception as error:
+        return 1
+    except Exception as error:  # pylint: disable=broad-except
         return 'Error: %s' % error

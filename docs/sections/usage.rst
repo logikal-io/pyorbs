@@ -72,16 +72,17 @@ re-generation of the requirements lockfile if the requirements changed. This inc
 files that are further specified within the appropriate requirements files using the ``-r`` or
 ``-c`` options.
 
-.. note:: Whether a lockfile is out-of-date is assessed using a hash of the concatenated
-    requirements and constraints files which is stored in the header of each lockfile.
+.. note:: Whether a lockfile is outdated is assessed using a hash of the concatenated requirements
+    and constraints files which is stored in the header of each lockfile.
 
 In case you only want to generate or re-generate lockfiles you can use the ``orb --freeze`` or
 ``orb -f`` command. You can also specify the Python executable with this command when necessary
-using the ``-e`` or ``--exec`` option.
+using the ``-e`` or ``--exec`` option. Finally, you can use the ``orb --test`` or ``orb -t``
+command for checking whether your lockfiles are up-to-date.
 
-.. tip:: You can freeze multiple requirements files in one run by specifying a folder instead of a
-    single file with the ``--reqs`` or ``-r`` option. This can be useful when you need to manage
-    multiple requirements files for different environments for example.
+.. tip:: You can freeze or test multiple requirements files in one run by specifying a folder
+    instead of a single file with the ``--reqs`` or ``-r`` option. This can be useful when you need
+    to manage multiple requirements files for different environments for example.
 
 Glowing Orb
 -----------

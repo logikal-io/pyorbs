@@ -9,7 +9,7 @@ def current_shell_type():
     for shell in SHELLS:
         if shell in environ['SHELL']:
             return shell
-    raise RuntimeError('Shell \'%(SHELL)s\' is not supported' % environ)
+    raise RuntimeError('Shell "%(SHELL)s" is not supported' % environ)
 
 
 def execute(init=None, command=None, replace=False, capture=False):
@@ -37,18 +37,17 @@ def execute(init=None, command=None, replace=False, capture=False):
     sys.stdout.flush()
     sys.stderr.flush()
     if replace:
-        execl(shell, shell, *args)
-    elif capture:
-        return run([shell] + args, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-    else:
-        return run([shell] + args)
+        return execl(shell, shell, *args)
+    if capture:
+        return run([shell] + args, stdout=PIPE, stderr=PIPE, universal_newlines=True, check=False)
+    return run([shell] + args, check=False)
 
 
 def which(command):
     """
     Returns the absolute path of the given command.
     """
-    which = run(['which', command], stdout=PIPE, universal_newlines=True)
+    which = run(['which', command], stdout=PIPE, universal_newlines=True, check=False)
     if which.returncode:
-        raise ValueError('Command \'%s\' not found' % command)
+        raise ValueError('Command "%s" not found' % command)
     return which.stdout.strip()

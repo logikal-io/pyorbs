@@ -23,25 +23,33 @@ Make sure to test pyorbs on all supported shells that are listed in the :ref:`in
 section of the documentation (for this you will need to install all of these shells on your
 system).
 
-Continuous Deployment
----------------------
-You generally do not have to worry about this too much, as the continuous deployment system is
-maintained by `Webrepublic <https://webrepublic.com/en/>`_'s Data & Technology department. We use
-`Concourse <https://concourse-ci.org>`_ for orchestrating the various tasks necessary for
-publishing this package, including building and updating the documentation upon successful merging
-into the ``master`` branch.
+Creating Releases
+-----------------
+You can make a new release as follows:
 
-In case hell breaks loose and you must publish pyorbs manually, do this::
+#. Make sure the changelog is properly updated.
+#. Create a pull request and ask for review.
+#. Once the pull request has been approved, increase the version number using ``bump2version``.
+#. Merge the pull request.
+#. Create a new distribution and upload it to `test.pypi.org <https://test.pypi.org>`_::
 
-    $ ./setup.py sdist bdist_wheel
-    $ twine check dist/*
+    $ make dist
     $ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+#. Check if your distribution works properly::
+
+    $ pip3 install --index-url https://test.pypi.org/simple/ pyorbs
+    $ orb -v
+
+#. Finally, upload the new distribution to PyPI::
+
     $ twine upload dist/*
 
-Do not forget to `check your distribution <https://packaging.python.org/guides/using-testpypi/>`_
-on `test.pypi.org <https://test.pypi.org>`_ before uploading it to PyPI.
+Once the new version has been uploaded, `Webrepublic's <https://webrepublic.com/en/>`_
+`Concourse <https://concourse-ci.org>`_ cluster will take care of all further deployment steps,
+such as building and publishing the documentation or updating the various Docker base images.
 
 Maintenance
 -----------
-This package is currently maintained by the `Webrepublic <https://webrepublic.com/en/>`_ Data &
-Technology department.
+This package is maintained by the `Webrepublic <https://webrepublic.com/en/>`_ Data & Technology
+department.
