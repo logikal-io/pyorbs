@@ -6,6 +6,10 @@ We document changes in line with the `"keep a changelog" principles
 
 You can find the release dates on `GitHub <https://github.com/wbrp/pyorbs/releases>`__.
 
+1.3.0
+-----
+- *Added:* Bash command completion.
+
 1.2.0
 -----
 - *Added:* Option for testing whether requirements files are up-to-date.

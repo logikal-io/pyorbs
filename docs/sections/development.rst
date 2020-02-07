@@ -38,7 +38,7 @@ You can make a new release as follows:
 
 #. Check if your distribution works properly::
 
-    $ pip3 install --index-url https://test.pypi.org/simple/ pyorbs
+    $ pip3 install --user --upgrade --index-url https://test.pypi.org/simple/ pyorbs
     $ orb -v
 
 #. Finally, upload the new distribution to PyPI::
