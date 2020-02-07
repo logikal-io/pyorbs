@@ -110,3 +110,9 @@ could add the line
 to the tmux configuration file to make ``ctrl + t`` open a new window at the current pane path
 with the currently glowing orb activated. The ``--shell`` option ensures that a top-level
 interactive shell (and thus a window) is always created, even when there is no orb to activate.
+
+Command Completion
+------------------
+You can install bash command completion by executing the following command::
+
+    $ orb --bash | sudo tee "$(pkg-config --variable=completionsdir bash-completion)/orb"

@@ -7,6 +7,7 @@ import argparse
 
 from pyorbs.orbs import Orbs
 from pyorbs.reqs import Requirements
+from pyorbs.templates import render
 
 __project__ = 'pyorbs'
 __version__ = '1.2.0'
@@ -33,6 +34,7 @@ def main(args=tuple(sys.argv[1:])):
     group.add_argument('-f', '--freeze', action='store_true', help='freeze requirements')
     group.add_argument('-t', '--test', action='store_true', help='test requirements')
     group.add_argument('-g', '--glow', action='store_true', help='toggle orb glow')
+    group.add_argument('--bash', action='store_true', help='print bash completion script')
     parser.add_argument('name', nargs='?', help='name of the orb (default: glowing orb name)')
     parser.add_argument('-v', '--version', action='store_true', help='show version')
     parser.add_argument('-c', '--command', metavar='X',
@@ -63,6 +65,8 @@ def main(args=tuple(sys.argv[1:])):
             return orbs.test(args.reqs)
         elif args.glow:
             orbs.toggle_glow(args.name)
+        elif args.bash:
+            print(render('orb-completion.bash').rstrip())
         elif args.version:
             print(__version__)
         else:

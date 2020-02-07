@@ -36,6 +36,4 @@ _orb_completions() {
         local words=$(ls "${path}")
         COMPREPLY=($(compgen -W "${words}" -- "${current}"))
     fi
-}
-
-complete -F _orb_completions orb
+} && complete -F _orb_completions orb

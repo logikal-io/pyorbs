@@ -103,6 +103,10 @@ def test_glow(monkeypatch, orb, reqs):
     assert 'No orb' in orb(['-g']).stdout  # remove glow indirectly
 
 
+def test_bash_completion(orb):
+    assert 'complete' in orb(['--bash']).stdout
+
+
 def test_session(orb, tmp_reqs):
     orb(['-f', '-r', tmp_reqs()])  # freeze
     orb(['-m', 'test_orb', '-r', tmp_reqs()])  # make
