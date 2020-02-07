@@ -10,7 +10,7 @@ from pyorbs.reqs import Requirements
 from pyorbs.templates import render
 
 __project__ = 'pyorbs'
-__version__ = '1.2.0'
+__version__ = '1.3.0'
 __author__ = 'Webrepublic AG'
 __author_email__ = 'tech@webrepublic.ch'
 __maintainer__ = 'Webrepublic AG'
