@@ -11,15 +11,13 @@ from pyorbs.templates import render
 
 __project__ = 'pyorbs'
 __version__ = '1.3.0'
-__author__ = 'Webrepublic AG'
-__author_email__ = 'tech@webrepublic.ch'
-__maintainer__ = 'Webrepublic AG'
-__maintainer_email__ = 'tech@webrepublic.ch'
+__author__ = 'Logikal'
+__maintainer__ = 'Logikal'
 __keywords__ = 'development virtual environment'
 __urls__ = {
-    'docs': 'https://pyorbs.wbrp.ch',
-    'source': 'https://github.com/wbrp/pyorbs',
-    'issues': 'https://github.com/wbrp/pyorbs/issues'
+    'docs': 'https://pyorbs.readthedocs.io',
+    'source': 'https://github.com/logikal-jp/pyorbs',
+    'issues': 'https://github.com/logikal-jp/pyorbs/issues'
 }
 
 

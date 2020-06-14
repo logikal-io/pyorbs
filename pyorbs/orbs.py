@@ -128,7 +128,8 @@ class Orb:
         self._orbs = orbs
         self._shell = shell
 
-    def orb(self, shell_type=current_shell_type()):
+    def orb(self, shell_type=None):
+        shell_type = shell_type or current_shell_type()
         return join(self._orbs.path, self.name, 'bin/activate_orb') + '.' + shell_type
 
     def make(self, reqs, executable=sys.executable, quiet=False, update=False):
