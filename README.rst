@@ -4,8 +4,8 @@ A tool for managing Python virtual environments.
 
 Getting Started
 ---------------
-Please visit the `project documentation <https://pyorbs.wbrp.ch>`_ to learn more about working
-with pyorbs.
+Please visit the `project documentation <https://pyorbs.readthedocs.io>`_ to learn more about
+working with pyorbs.
 
 Contributing
 ------------

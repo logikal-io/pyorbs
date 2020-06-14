@@ -1,13 +1,13 @@
 Development
 ===========
 We welcome any contribution to our open source projects. If you want to participate in our work,
-make sure to read our `software development principles <https://github.com/wbrp/principles>`_
+make sure to read our `software development principles <https://github.com/logikal-jp/principles>`_
 before you start.
 
 Issue Reporting
 ---------------
 In case you encounter an issue feel free to let us know about it on `GitHub
-<https://github.com/wbrp/pyorbs/issues>`_.
+<https://github.com/logikal-jp/pyorbs/issues>`_.
 
 Development Environment
 -----------------------
@@ -45,11 +45,6 @@ You can make a new release as follows:
 
     $ twine upload dist/*
 
-Once the new version has been uploaded, `Webrepublic's <https://webrepublic.com/en/>`_
-`Concourse <https://concourse-ci.org>`_ cluster will take care of all further deployment steps,
-such as building and publishing the documentation or updating the various Docker base images.
-
 Maintenance
 -----------
-This package is maintained by the `Webrepublic <https://webrepublic.com/en/>`_ Data & Technology
-department.
+This package is maintained by `Logikal <https://logikal.jp>`_.
