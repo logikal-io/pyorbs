@@ -4,7 +4,7 @@ Changelog
 We document changes in line with the `"keep a changelog" principles
 <https://keepachangelog.com/en/1.1.0/>`_.
 
-You can find the release dates on `GitHub <https://github.com/logikal-jp/pyorbs/releases>`__.
+You can find the release dates on `GitHub <https://github.com/logikal-code/pyorbs/releases>`__.
 
 1.3.1
 -----

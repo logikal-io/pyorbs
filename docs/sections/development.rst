@@ -1,13 +1,13 @@
 Development
 ===========
 We welcome any contribution to our open source projects. If you want to participate in our work,
-make sure to read our `software development principles <https://github.com/logikal-jp/principles>`_
-before you start.
+make sure to read our
+`software development principles <https://github.com/logikal-code/principles>`_ before you start.
 
 Issue Reporting
 ---------------
 In case you encounter an issue feel free to let us know about it on `GitHub
-<https://github.com/logikal-jp/pyorbs/issues>`_.
+<https://github.com/logikal-code/pyorbs/issues>`_.
 
 Development Environment
 -----------------------
