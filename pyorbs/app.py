@@ -16,8 +16,8 @@ __maintainer__ = 'Logikal'
 __keywords__ = 'development virtual environment'
 __urls__ = {
     'docs': 'https://pyorbs.readthedocs.io',
-    'source': 'https://github.com/logikal-jp/pyorbs',
-    'issues': 'https://github.com/logikal-jp/pyorbs/issues'
+    'source': 'https://github.com/logikal-code/pyorbs',
+    'issues': 'https://github.com/logikal-code/pyorbs/issues'
 }
 
 
