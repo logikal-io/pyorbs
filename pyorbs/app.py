@@ -1,9 +1,9 @@
 """
 A tool for managing Python virtual environments.
 """
-import sys
-import os
 import argparse
+import os
+import sys
 
 from pyorbs.orbs import Orbs
 from pyorbs.reqs import Requirements

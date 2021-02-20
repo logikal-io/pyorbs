@@ -1,13 +1,13 @@
 import sys
 import tempfile
-from os import getcwd, walk, remove, environ
-from os.path import realpath, exists, isdir, join
+from os import environ, getcwd, remove, walk
+from os.path import exists, isdir, join, realpath
 from pathlib import Path
 from shutil import rmtree
 
-from pyorbs.templates import render
-from pyorbs.shell import execute, current_shell_type, SHELLS, which
 from pyorbs.reqs import Requirements
+from pyorbs.shell import SHELLS, current_shell_type, execute, which
+from pyorbs.templates import render
 
 
 class Orbs:

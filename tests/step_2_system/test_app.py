@@ -1,13 +1,13 @@
 import re
-from subprocess import run, PIPE
-from shutil import copyfile
 from os.path import basename, exists
 from pathlib import Path
+from shutil import copyfile
+from subprocess import PIPE, run
 
 from pytest import fixture
 
 from pyorbs.app import __version__
-from pyorbs.shell import SHELLS, which, current_shell_type
+from pyorbs.shell import SHELLS, current_shell_type, which
 
 
 @fixture(autouse=True, params=[which(shell) for shell in SHELLS])

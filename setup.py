@@ -5,7 +5,6 @@ import setuptools
 
 from pyorbs import app
 
-
 setuptools.setup(
     name=app.__project__,
     version=app.__version__,
