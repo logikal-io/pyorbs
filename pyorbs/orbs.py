@@ -186,9 +186,9 @@ class Orb:
         rmtree(join(self._orbs.path, self.name))
 
     def info(self):
-        print('Orb "%s"\n' % self.name)
-        outdated = self.activate(run='pip list --outdated', capture=True)
-        print(outdated.stdout.rstrip() if outdated.stdout else 'All packages are up-to-date')
+        print('Orb "%s"' % self.name)
+        old = self.activate(run='pip list --outdated', capture=True)
+        print('\n' + (old.stdout.rstrip() if old.stdout else 'All packages are up-to-date'))
 
     def activate(self, run=None, no_cd=False, capture=False):
         """
