@@ -163,6 +163,13 @@ def test_destroy(mocker, orbs):
     assert rmtree.called
 
 
+def test_info(capsys, mocker, orb):
+    execute = mocker.patch('pyorbs.orbs.execute')
+    execute.return_value.stdout = 'outdated'
+    orb.info()
+    assert 'outdated' in capsys.readouterr().out
+
+
 def test_activate_invalid(orbs):
     with raises(RuntimeError):
         orbs.orb('test').activate()

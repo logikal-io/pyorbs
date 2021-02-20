@@ -52,15 +52,8 @@ Limitations
 -----------
 There are also a few bad things about pyorbs:
 
-- Does not support Python 2 virtual environments.
 - Does not work with zsh, csh or tcsh shells.
-- May not work with fish in some cases due to `this bug <https://bugs.python.org/issue26664>`_ in
-  Python's :mod:`venv`.
 - May not work on Windows.
-
-It may be important to mention that most of these limitations are not a result of some
-architectural decisions, we just simply did not have the time and need to thoroughly test pyorbs on
-systems other than ours so far.
 
 Okay, but why?
 --------------

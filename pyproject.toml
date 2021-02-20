@@ -1,0 +1,34 @@
+# pytest
+[tool.pytest.ini_options]
+console_output_style = 'classic'
+xfail_strict = true
+filterwarnings = 'error'
+addopts = '--strict-config --strict-markers -n auto --isort --pylint --cov=. --no-cov-on-fail'
+norecursedirs = 'build dist docs'
+
+# isort
+[tool.isort]
+line_length = 99
+multi_line_output = 5
+balanced_wrapping = true
+combine_as_imports = true
+use_parentheses = true
+include_trailing_comma = true
+color_output = true
+
+# Pylint
+[tool.pylint.FORMAT]
+max-line-length = 99
+
+[tool.pylint.'MESSAGES CONTROL']
+enable = ['useless-suppression', 'use-symbolic-message-instead']
+disable = ['missing-docstring', 'redefined-outer-name']
+
+[tool.pylint.REPORTS]
+output-format = 'colorized'
+
+# Coverage
+[tool.coverage.report]
+fail_under = 100
+show_missing = true
+skip_covered = true

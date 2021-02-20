@@ -1,6 +1,6 @@
 import sys
 from os import environ, execl
-from subprocess import run, PIPE
+from subprocess import PIPE, run
 
 SHELLS = ('bash', 'fish')
 
@@ -47,7 +47,7 @@ def which(command):
     """
     Returns the absolute path of the given command.
     """
-    which = run(['which', command], stdout=PIPE, universal_newlines=True, check=False)
-    if which.returncode:
+    path = run(['which', command], stdout=PIPE, universal_newlines=True, check=False)
+    if path.returncode:
         raise ValueError('Command "%s" not found' % command)
-    return which.stdout.strip()
+    return path.stdout.strip()

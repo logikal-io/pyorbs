@@ -1,8 +1,7 @@
 Development
 ===========
 We welcome any contribution to our open source projects. If you want to participate in our work,
-make sure to read our
-`software development principles <https://github.com/logikal-code/principles>`_ before you start.
+make sure to try writing good tests and nice, clean code.
 
 Issue Reporting
 ---------------
@@ -44,7 +43,3 @@ You can make a new release as follows:
 #. Finally, upload the new distribution to PyPI::
 
     $ twine upload dist/*
-
-Maintenance
------------
-This package is maintained by `Logikal <https://logikal.jp>`_.

@@ -47,7 +47,7 @@ This will spawn a new sub-shell, initialize it and enter the virtual environment
 directory (which is the folder in which the orb was originally created). In case you do not want to
 change your working directory you can use the ``--no-cd`` or ``-n`` option.
 
-In order to deactivate an orb simply exit the shell by typing ``exit`` or hit ``ctrl + d``.
+In order to deactivate an orb simply exit the shell by typing ``exit`` or hit ``Ctrl + d``.
 
 You can also run a command in a given environment without the interactive shell::
 
@@ -107,7 +107,7 @@ could add the line
 
     bind -n C-t new-window -c '#{pane_current_path}' 'orb --shell --no-cd'
 
-to the tmux configuration file to make ``ctrl + t`` open a new window at the current pane path
+to the tmux configuration file to make ``Ctrl + t`` open a new window at the current pane path
 with the currently glowing orb activated. The ``--shell`` option ensures that a top-level
 interactive shell (and thus a window) is always created, even when there is no orb to activate.
 

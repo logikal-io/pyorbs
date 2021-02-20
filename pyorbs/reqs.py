@@ -1,8 +1,8 @@
-import re
 import hashlib
-from os.path import exists, isfile, dirname, join
-from pathlib import Path
+import re
 from collections import OrderedDict
+from os.path import dirname, exists, isfile, join
+from pathlib import Path
 
 from pyorbs.templates import render
 
