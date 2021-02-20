@@ -16,12 +16,13 @@ __maintainer__ = 'Logikal'
 __keywords__ = 'development virtual environment'
 __urls__ = {
     'docs': 'https://pyorbs.readthedocs.io',
+    'issues': 'https://github.com/logikal-code/pyorbs/issues',
+    'releases': 'https://pyorbs.readthedocs.io/en/v%s/sections/changelog.html' % __version__,
     'source': 'https://github.com/logikal-code/pyorbs',
-    'issues': 'https://github.com/logikal-code/pyorbs/issues'
 }
 
 
-def main(args=tuple(sys.argv[1:])):
+def main(args=tuple(sys.argv[1:])):  # pylint: disable=too-many-branches
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_argument_group(title='actions').add_mutually_exclusive_group()
     group.add_argument('-a', '--activate', action='store_true', help='activate an orb (default)')
@@ -31,6 +32,7 @@ def main(args=tuple(sys.argv[1:])):
     group.add_argument('-d', '--destroy', action='store_true', help='destroy an orb')
     group.add_argument('-f', '--freeze', action='store_true', help='freeze requirements')
     group.add_argument('-t', '--test', action='store_true', help='test requirements')
+    group.add_argument('-i', '--info', action='store_true', help='orb information')
     group.add_argument('-g', '--glow', action='store_true', help='toggle orb glow')
     group.add_argument('--bash', action='store_true', help='print bash completion script')
     parser.add_argument('name', nargs='?', help='name of the orb (default: glowing orb name)')
@@ -57,6 +59,8 @@ def main(args=tuple(sys.argv[1:])):
             orbs.orb(args.name).make(Requirements(args.reqs, args.bare), args.exec, update=True)
         elif args.destroy:
             orbs.orb(args.name).destroy()
+        elif args.info:
+            orbs.orb(args.name).info()
         elif args.freeze:
             orbs.freeze(args.reqs, args.exec)
         elif args.test:

@@ -18,7 +18,7 @@ class Orbs:
 
     def list(self):
         orbs = [orb + ' *' if orb == self.glowing() else orb for orb in self.orbs]
-        print('\n'.join(orbs) if orbs else 'There are no orbs')
+        print('\n'.join(sorted(orbs)) if orbs else 'There are no orbs')
 
     @staticmethod
     def freeze(reqs, executable=sys.executable):
@@ -184,6 +184,11 @@ class Orb:
         if self._orbs.glowing() == self.name:
             self._orbs.toggle_glow(self.name)
         rmtree(join(self._orbs.path, self.name))
+
+    def info(self):
+        print('Orb "%s"\n' % self.name)
+        outdated = self.activate(run='pip list --outdated', capture=True)
+        print(outdated.stdout.rstrip() if outdated.stdout else 'All packages are up-to-date')
 
     def activate(self, run=None, no_cd=False, capture=False):
         """

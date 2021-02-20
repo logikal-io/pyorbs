@@ -61,12 +61,13 @@ def test_command(orb, reqs):
     assert 'pip 19.0.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # check package
 
 
-def test_list(orb, reqs):
+def test_info_and_list(orb, reqs):
     assert 'no orbs' in orb(['-l']).stdout
     orb(['-m', 'test_orb', '-r', reqs(raw=True)])  # make
     assert 'test_orb' in orb(['-l']).stdout
     orb(['test_orb'])  # activate
     assert 'test_orb *' in orb(['-l']).stdout
+    assert 'test_orb' in orb(['-i']).stdout
     orb(['-d', 'test_orb'])  # destroy
     assert 'no orbs' in orb(['-l']).stdout
 

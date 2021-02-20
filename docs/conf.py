@@ -27,4 +27,4 @@ html_show_sourcelink = False
 # Extensions
 autosectionlabel_prefix_document = True
 intersphinx_timeout = 30
-intersphinx_mapping = {'python': ('https://docs.python.org/3.5', 'inventory/python-3.5.inv')}
+intersphinx_mapping = {'python': ('https://docs.python.org/3.6', 'inventory/python-3.6.inv')}
