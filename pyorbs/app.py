@@ -10,7 +10,7 @@ from pyorbs.reqs import Requirements
 from pyorbs.templates import render
 
 __project__ = 'pyorbs'
-__version__ = '1.4.0'
+__version__ = '1.4.1'
 __author__ = 'Logikal'
 __maintainer__ = 'Logikal'
 __keywords__ = 'development virtual environment'

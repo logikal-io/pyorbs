@@ -30,9 +30,9 @@ def tmp_reqs(tmp_path, reqs):
     return give_tmp_reqs
 
 
-def lockfiles_equal(file_1, file_2):
+def assert_lockfiles_equal(file_1, file_2):
     comments = re.compile('^#.*\n?', re.MULTILINE)  # remove comments
-    return comments.sub('', Path(file_1).read_text()) == comments.sub('', Path(file_2).read_text())
+    assert comments.sub('', Path(file_1).read_text()) == comments.sub('', Path(file_2).read_text())
 
 
 def test_help(orb):
@@ -45,7 +45,7 @@ def test_version(orb):
 
 def test_make(orb, tmp_path, tmp_reqs, reqs):
     orb(['-m', 'test_orb', '-r', tmp_reqs(), '-e', 'python3'])  # make
-    assert lockfiles_equal(tmp_reqs() + '.lock', reqs(raw=True) + '.lock')  # lockfile
+    assert_lockfiles_equal(tmp_reqs() + '.lock', reqs(raw=True) + '.lock')  # lockfile
     assert exists(str(tmp_path / 'test_orb/bin/activate_orb') + '.' + current_shell_type())
 
 
@@ -74,14 +74,14 @@ def test_info_and_list(orb, reqs):
 
 def test_freeze(orb, tmp_reqs, reqs):
     orb(['-f', '-r', tmp_reqs()])  # freeze
-    assert lockfiles_equal(tmp_reqs() + '.lock', reqs(raw=True) + '.lock')  # lockfile
+    assert_lockfiles_equal(tmp_reqs() + '.lock', reqs(raw=True) + '.lock')  # lockfile
 
 
 def test_freeze_referred(orb, tmp_reqs, reqs):
     tmp_reqs('changed')  # copy requirements / constraints file
     for check in ('referred_requirements', 'referred_constraints'):
         orb(['-f', '-r', tmp_reqs('%s_changed' % check)])  # freeze
-        assert lockfiles_equal(tmp_reqs('%s_changed' % check) + '.lock',
+        assert_lockfiles_equal(tmp_reqs('%s_changed' % check) + '.lock',
                                reqs('%s_unchanged' % check, raw=True) + '.lock')  # lockfile
 
 
