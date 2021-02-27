@@ -82,7 +82,7 @@ def test_freeze_referred(orb, tmp_reqs, reqs):
     for check in ('referred_requirements', 'referred_constraints'):
         orb(['-f', '-r', tmp_reqs('%s_changed' % check)])  # freeze
         assert_lockfiles_equal(tmp_reqs('%s_changed' % check) + '.lock',
-                        reqs('%s_unchanged' % check, raw=True) + '.lock')  # lockfile
+                               reqs('%s_unchanged' % check, raw=True) + '.lock')  # lockfile
 
 
 def test_test(orb, reqs):
