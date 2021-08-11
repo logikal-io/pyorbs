@@ -172,7 +172,7 @@ class Orb:
 
         # Generating lockfile
         if reqs.changed:
-            freeze = 'pip freeze --all --exclude-editable | grep -v "pkg-resources"'
+            freeze = 'pip freeze --all --exclude-editable | grep -v "pkg[-_]resources"'
             reqs.lock(self.activate(run=freeze, capture=True).stdout)
         if not quiet:
             print('Orb "%s" is ready for use' % self.name)

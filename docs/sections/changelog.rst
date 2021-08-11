@@ -6,6 +6,10 @@ We document changes in line with the `"keep a changelog" principles
 
 You can find the release dates on `GitHub <https://github.com/logikal-code/pyorbs/releases>`__.
 
+1.4.2
+-----
+- *Fixed:* The ``pkg_resources`` package is also excluded from lockfiles.
+
 1.4.1
 -----
 - *Changed:* Removed editable packages from lockfiles.
