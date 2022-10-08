@@ -40,20 +40,22 @@ class Orbs:
                 print('Requirements lockfile of "%s" is up-to-date' % reqs_obj.path)
 
     @staticmethod
-    def test(reqs):
+    def test(reqs, quiet=False):
         """
         Returns 0 when all requirements files are up-to-date in a given path and 1 otherwise.
 
         Args:
             reqs (str): The path to the requirements files.
+            quiet (bool): Whether to suppress info messages.
 
         """
         outdated = False
         for reqs_obj in Orbs.reqs_list(reqs):
             if reqs_obj.changed:
                 outdated = True
-                print('Requirements lockfile of "%s" is outdated' % reqs_obj.path)
-            else:
+                if not quiet:
+                    print('Requirements lockfile of "%s" is outdated' % reqs_obj.path)
+            elif not quiet:
                 print('Requirements lockfile of "%s" is up-to-date' % reqs_obj.path)
         return int(outdated)
 
