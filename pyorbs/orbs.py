@@ -167,7 +167,7 @@ class Orb:
             }))
 
         # Installing requirements
-        command = 'source "%s" && pip install --upgrade pip' % self.orb()
+        command = 'source "%s" && pip install --upgrade pip wheel' % self.orb()
         command += ' && pip install --upgrade -r "%s"' % reqs
         if execute(command=command).returncode:
             raise RuntimeError('Unable to install requirements')

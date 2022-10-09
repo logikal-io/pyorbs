@@ -7,7 +7,7 @@ SHELLS = ('bash', 'fish')
 
 def current_shell_type():
     for shell in SHELLS:
-        if shell in environ['SHELL']:
+        if shell in environ.get('SHELL', '/bin/bash'):
             return shell
     raise RuntimeError('Shell "%(SHELL)s" is not supported' % environ)
 
