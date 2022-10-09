@@ -6,6 +6,10 @@ We document changes in line with the `"keep a changelog" principles
 
 You can find the release dates on `GitHub <https://github.com/logikal-code/pyorbs/releases>`__.
 
+1.6.1
+-----
+- *Fixed:* Default shell is now properly used.
+
 1.6.0
 -----
 - *Added:* Default shell.

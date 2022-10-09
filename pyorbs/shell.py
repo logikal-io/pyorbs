@@ -2,12 +2,13 @@ import sys
 from os import environ, execl
 from subprocess import PIPE, run
 
+DEFAULT_SHELL = '/bin/bash'
 SHELLS = ('bash', 'fish')
 
 
 def current_shell_type():
     for shell in SHELLS:
-        if shell in environ.get('SHELL', '/bin/bash'):
+        if shell in environ.get('SHELL', DEFAULT_SHELL):
             return shell
     raise RuntimeError('Shell "%(SHELL)s" is not supported' % environ)
 
@@ -33,7 +34,7 @@ def execute(init=None, command=None, replace=False, capture=False):
     elif current_shell_type() == 'fish':
         args = ['-C', 'source "%s"' % init] if init else ['-c', command] if command else []
 
-    shell = environ['SHELL']
+    shell = environ.get('SHELL', DEFAULT_SHELL)
     sys.stdout.flush()
     sys.stderr.flush()
     if replace:
