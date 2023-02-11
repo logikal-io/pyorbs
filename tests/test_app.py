@@ -1,18 +1,14 @@
 import os
 import re
-from importlib import reload
 from pathlib import Path
 from subprocess import CompletedProcess
 
 from pytest import MonkeyPatch
 from pytest_mock import MockerFixture
 
-from pyorbs import orbs
 from pyorbs.app import main
 from pyorbs.shell import current_shell_type
 from tests.conftest import OrbFixture, RequirementsFixture
-
-reload(orbs)  # ensures coverage captures definitions
 
 
 def assert_lockfiles_equal(file_1: str, file_2: str) -> None:
@@ -43,7 +39,7 @@ def test_version(orb: OrbFixture) -> None:
 def test_activate(orb: OrbFixture, requirements: RequirementsFixture) -> None:
     orb(['-m', 'test_orb', '-r', requirements()])  # make
     orb(['test_orb'])  # activate
-    assert 'test_orb' in orb(['-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # environment
+    assert 'test_orb' in orb(['test_orb', '-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # environment
 
 
 def test_activate_command(orb: OrbFixture, requirements: RequirementsFixture) -> None:
@@ -59,7 +55,7 @@ def test_list_and_info(orb: OrbFixture, requirements: RequirementsFixture, tmp_p
     assert 'test_orb' in orb(['-l']).stdout
     orb(['test_orb'])  # activate
     assert 'test_orb *' in orb(['-l']).stdout
-    assert 'test_orb' in orb(['-i']).stdout
+    assert 'test_orb' in orb(['test_orb', '-i']).stdout
     orb(['-d', 'test_orb'])  # destroy
     assert 'no orbs' in orb(['-l']).stdout
 
@@ -174,10 +170,6 @@ def test_test(orb: OrbFixture, requirements: RequirementsFixture) -> None:
         for file in ('referred_requirements', 'referred_constraints'):
             process = orb(['-t', '-r', requirements(f'{file}_{change}')], check=False)
             assert process.returncode == return_code
-
-
-def test_legacy_test(requirements: RequirementsFixture) -> None:
-    assert not orbs.Orbs.test(requirements('unchanged'))
 
 
 def test_glow(
