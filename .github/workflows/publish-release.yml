@@ -8,7 +8,7 @@ jobs:
     name: Publish release
     uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v4
     with:
-      name: mindlab
+      name: pyorbs
     permissions:
       contents: read
       id-token: write
