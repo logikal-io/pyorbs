@@ -7,6 +7,7 @@ jobs:
     uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v4
     with:
       init-commands: sudo apt-get install fish
+      fetch-depth: 0  # needed for inferring the correct editable install version
     permissions:
       contents: read
       id-token: write
