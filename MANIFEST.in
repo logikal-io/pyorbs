@@ -1,3 +1,4 @@
-include LICENSE.txt
-include pyorbs/*
-include pyorbs/templates/*
+exclude .gitignore
+prune .github
+prune docs
+prune tests

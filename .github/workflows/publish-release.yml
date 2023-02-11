@@ -1,0 +1,15 @@
+name: Publish release
+on:
+  release:
+    types: [released]
+
+jobs:
+  publish-release:
+    name: Publish release
+    uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v4
+    with:
+      name: mindlab
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit

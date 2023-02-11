@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 _orb_completions() {
+
     compopt +o default
 
     # Extracting arguments
-    local path_args=("-r --reqs -e --exec -o --orbs")
+    local path_args=("-r --requirements -e --executable --path")
     local args=(${COMP_WORDS[@]})
     local current=${args[${COMP_CWORD}]}
     local last=${args[-1]}
@@ -29,8 +30,8 @@ _orb_completions() {
     ]]; then
         compopt -o default; COMPREPLY=()  # adding paths
     else
-        local path=~/.pyorbs
-        if [[ ${COMP_LINE} =~ (-o |--orbs )([^ ]+) ]]; then path=${BASH_REMATCH[2]}; fi
+        local path="${XDG_DATA_HOME:-$HOME/.local/share}/pyorbs"
+        if [[ ${COMP_LINE} =~ (--path )([^ ]+) ]]; then path=${BASH_REMATCH[2]}; fi
         path="${path/#\~/$HOME}"
         if [[ ! -d "${path}" ]]; then return; fi
         local words=$(ls "${path}")

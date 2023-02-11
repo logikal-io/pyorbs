@@ -1,54 +1,69 @@
+import os
 import sys
-from os import environ, execl
-from subprocess import PIPE, run
+from pathlib import Path
+from subprocess import CompletedProcess, run
+from typing import Optional
 
-DEFAULT_SHELL = '/bin/bash'
-SHELLS = ('bash', 'fish')
-
-
-def current_shell_type():
-    for shell in SHELLS:
-        if shell in environ.get('SHELL', DEFAULT_SHELL):
-            return shell
-    raise RuntimeError('Shell "%(SHELL)s" is not supported' % environ)
+SHELL_TYPES = ('bash', 'fish')
 
 
-def execute(init=None, command=None, replace=False, capture=False):
+def current_shell(default: str = 'bash') -> str:
+    return os.environ.get('SHELL', which(default))
+
+
+def current_shell_type(shell: Optional[str] = None) -> str:
+    shell = shell or current_shell()
+    for shell_type in SHELL_TYPES:
+        if shell_type in shell:
+            return shell_type
+    raise RuntimeError(f'Shell "{shell}" is not supported')
+
+
+def execute(
+    init: Optional[Path] = None,
+    command: Optional[str] = None,
+    replace: bool = False,
+    capture: bool = False,
+) -> 'CompletedProcess[str]':
     """
     Execute a shell command or start a new interactive session.
 
     Args:
-        init (str): The init file to be used when starting an interactive session.
-        command (str): The command to be executed.
-        replace (bool): Whether to replace the current process or return the completed process.
-        capture (bool): Whether to capture the standard output and standard error.
+        init: The initialization file to use.
+        command: The command to execute.
+        replace: Whether to replace the current process or return the completed process.
+        capture: Whether to capture the standard output and standard error.
 
     """
-    if init and command:
-        raise ValueError('You cannot use an initialization file with a command')
     if replace and capture:
-        raise ValueError('You cannot capture the output when replacing the current process')
+        raise ValueError('The output cannot be captured when replacing the current process')
 
-    if current_shell_type() == 'bash':
-        args = ['--init-file', init] if init else ['-c', command] if command else []
-    elif current_shell_type() == 'fish':
-        args = ['-C', 'source "%s"' % init] if init else ['-c', command] if command else []
+    shell = current_shell()
+    args = [shell]
+    if init and command:
+        command = f'source "{init}"; {command}'
+    if init and not command:
+        shell_type = current_shell_type(shell=shell)  # nosec: just a helper function
+        if shell_type == 'bash':
+            args += ['--init-file', str(init)]
+        elif shell_type == 'fish':
+            args += ['-C', f'source "{init}"']
+    if command:
+        args += ['-c', command]
 
-    shell = environ.get('SHELL', DEFAULT_SHELL)
     sys.stdout.flush()
     sys.stderr.flush()
     if replace:
-        return execl(shell, shell, *args)
-    if capture:
-        return run([shell] + args, stdout=PIPE, stderr=PIPE, universal_newlines=True, check=False)
-    return run([shell] + args, check=False)
+        return os.execv(shell, args)  # nosec: trusted input
+    return run(args, capture_output=capture, text=True, check=False)  # nosec: trusted input
 
 
-def which(command):
+def which(command: str) -> str:
     """
-    Returns the absolute path of the given command.
+    Return the absolute path of the given command.
     """
-    path = run(['which', command], stdout=PIPE, universal_newlines=True, check=False)
-    if path.returncode:
-        raise ValueError('Command "%s" not found' % command)
-    return path.stdout.strip()
+    args = ['which', command]
+    process = run(args, capture_output=True, text=True, check=False)  # nosec: trusted input
+    if process.returncode:
+        raise ValueError(f'Command "{command}" not found')
+    return process.stdout.strip()
