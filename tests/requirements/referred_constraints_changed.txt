@@ -2,4 +2,3 @@
 
 pip
 setuptools
-wheel
