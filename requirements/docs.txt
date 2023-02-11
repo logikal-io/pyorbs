@@ -1,0 +1,3 @@
+-e .
+
+logikal-docs==1.1.3

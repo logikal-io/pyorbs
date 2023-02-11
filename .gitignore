@@ -1,9 +1,11 @@
+# Caches
 __pycache__
-/build/
-/docs/_build/
-/dist/
-*.egg-info/
 .coverage*
-.DS_Store
-*.swp
-*.tmp
+.mypy_cache/
+.pytest_cache/
+
+# Build artifacts
+/build/
+/dist/
+/docs/build/
+*.egg-info/

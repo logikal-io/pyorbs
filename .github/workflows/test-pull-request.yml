@@ -1,0 +1,13 @@
+name: Test pull request
+on: pull_request
+
+jobs:
+  run-python-tests:
+    name: Run Python tests
+    uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v4
+    with:
+      init-commands: sudo apt-get install fish
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit
