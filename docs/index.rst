@@ -1,4 +1,6 @@
+.. Documentation structure
 .. toctree::
+    :caption: Documentation
     :hidden:
 
     self
@@ -6,6 +8,14 @@
     usage
     development
     license
+
+.. toctree::
+    :caption: External Links
+    :hidden:
+
+    Release Notes <https://github.com/logikal-io/pyorbs/releases>
+    Issue Tracker <https://github.com/logikal-io/pyorbs/issues>
+    Source Code <https://github.com/logikal-io/pyorbs>
 
 Getting Started
 ===============
