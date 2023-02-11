@@ -49,7 +49,7 @@ def test_activate(orb: OrbFixture, requirements: RequirementsFixture) -> None:
 def test_activate_command(orb: OrbFixture, requirements: RequirementsFixture) -> None:
     orb(['-m', 'test_orb', '-r', requirements()])  # make
     assert 'test_orb' in orb(['test_orb', '-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # environment
-    assert 'pip 19.0.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
+    assert 'pip 23.0' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
 
 
 def test_list_and_info(orb: OrbFixture, requirements: RequirementsFixture, tmp_path: Path) -> None:
