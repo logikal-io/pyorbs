@@ -45,7 +45,7 @@ Orb activation is not very difficult::
 
 This will spawn a new sub-shell, initialize it and enter the virtual environment and the project
 directory (which is the folder in which the orb was originally created). In case you do not want to
-change your working directory you can use the ``--no-cd`` or ``-n`` option.
+change your working directory you can use the ``--no-cd`` option.
 
 In order to deactivate an orb simply exit the shell by typing ``exit`` or hit ``Ctrl + d``.
 
@@ -54,7 +54,7 @@ You can also run a command in a given environment without the interactive shell:
     $ orb magic -c ./magical-app
 
 Please keep in mind that the working directory is also changed in this case before running the
-command, but again, you can use the ``--no-cd`` or ``-n`` option to override this behavior.
+command, but again, you can use the ``--no-cd`` option to override this behavior.
 
 Managing Requirements
 ---------------------
