@@ -23,7 +23,7 @@ classifiers = [
 dynamic = ['version']
 
 [project.scripts]
-orb = 'pyorbs.app:main'
+orb = 'pyorbs.orb:main'
 
 [project.urls]
 'Documentation' = 'https://docs.logikal.io/pyorbs/'

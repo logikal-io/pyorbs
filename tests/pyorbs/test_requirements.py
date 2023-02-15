@@ -3,7 +3,7 @@ from pathlib import Path
 from pytest import raises
 
 from pyorbs.requirements import Requirements
-from tests.conftest import RequirementsFixture
+from tests.pyorbs.conftest import RequirementsFixture
 
 
 def test_requirements(requirements: RequirementsFixture) -> None:

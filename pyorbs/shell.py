@@ -47,7 +47,7 @@ def execute(
         if shell_type == 'bash':
             args += ['--init-file', str(init)]
         elif shell_type == 'fish':
-            args += ['-C', f'source "{init}"']
+            args += ['--init-command', f'source "{init}"']
     if command:
         args += ['-c', command]
 
