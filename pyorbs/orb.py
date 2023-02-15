@@ -6,7 +6,7 @@ import sys
 import tempfile
 from importlib import metadata
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Sequence, Set, TypeVar, cast
+from typing import Any, Callable, Dict, List, Optional, Sequence, Set, TypeVar, Union, cast
 
 from pyorbs.requirements import Requirements
 from pyorbs.shell import SHELL_TYPES, current_shell_type, execute, which
@@ -349,3 +349,12 @@ class Orb:
         Print bash completion script.
         """
         print(render('orb-completion.bash').strip())
+
+
+def main(args: Sequence[str] = tuple(sys.argv[1:])) -> Union[int, str]:
+    try:
+        return Orb(args=args).act()
+    except KeyboardInterrupt:
+        return 1
+    except (ValueError, RuntimeError) as error:
+        return f'Error: {error}'

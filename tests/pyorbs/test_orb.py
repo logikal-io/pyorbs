@@ -2,13 +2,14 @@ import os
 import re
 from pathlib import Path
 from subprocess import CompletedProcess
+from types import SimpleNamespace
 
-from pytest import MonkeyPatch
+from pytest import MonkeyPatch, raises
 from pytest_mock import MockerFixture
 
-from pyorbs.app import main
+from pyorbs.orb import Orb, action, main
 from pyorbs.shell import current_shell_type
-from tests.conftest import OrbFixture, RequirementsFixture
+from tests.pyorbs.conftest import OrbFixture, RequirementsFixture
 
 
 def assert_lockfiles_equal(file_1: str, file_2: str) -> None:
@@ -23,8 +24,17 @@ def assert_error(process: 'CompletedProcess[str]', match: str, return_code: int 
     assert re.search(f'Error: .*{match}', process.stderr)
 
 
+def test_invalid_action() -> None:
+    with raises(RuntimeError, match='must have a docstring'):
+        class Invalid:  # pylint: disable=too-few-public-methods, unused-variable
+            @staticmethod
+            @action()
+            def missing_docstring() -> None:
+                ...
+
+
 def test_keyboard_interrupt(mocker: MockerFixture) -> None:
-    mocker.patch('pyorbs.app.Orb.act', side_effect=KeyboardInterrupt)
+    mocker.patch('pyorbs.orb.Orb.act', side_effect=KeyboardInterrupt)
     assert main(args=['-l']) == 1
 
 
@@ -42,10 +52,26 @@ def test_activate(orb: OrbFixture, requirements: RequirementsFixture) -> None:
     assert 'test_orb' in orb(['test_orb', '-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # environment
 
 
+def test_activate_execute(mocker: MockerFixture, tmp_path: Path) -> None:
+    mocker.patch.dict(os.environ, {'SHELL': 'bash'})
+    mocker.patch('pyorbs.orb.Orb.glow')
+    init = tmp_path / 'test/bin/activate_orb.bash'
+    init.parent.mkdir(parents=True)
+    init.touch()
+    execute = mocker.patch('pyorbs.orb.execute', return_value=CompletedProcess([], returncode=0))
+    Orb(args=['test', '--path', str(tmp_path)]).act()
+    execute.assert_called_with(init=init, command=None, replace=True, capture=False)
+
+
 def test_activate_command(orb: OrbFixture, requirements: RequirementsFixture) -> None:
     orb(['-m', 'test_orb', '-r', requirements()])  # make
     assert 'test_orb' in orb(['test_orb', '-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # environment
     assert 'pip 23.0' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
+
+
+def test_activate_error() -> None:
+    with raises(RuntimeError, match='activation file .* not found'):
+        Orb().activate(name='test', path=Path('invalid'))
 
 
 def test_list_and_info(orb: OrbFixture, requirements: RequirementsFixture, tmp_path: Path) -> None:
@@ -104,6 +130,12 @@ def test_make_errors(
         orb(['-m', 'test', '-r', tmp_requirements('changed')], check=False),
         match='lockfile of .* is outdated',
     )
+
+
+def test_make_venv_error(mocker: MockerFixture, tmp_path: Path) -> None:
+    mocker.patch('pyorbs.orb.execute', return_value=SimpleNamespace(returncode=1))
+    with raises(RuntimeError, match='Unable to create virtual environment'):
+        Orb().make(name='test', path=tmp_path)
 
 
 def test_update_errors(orb: OrbFixture) -> None:
