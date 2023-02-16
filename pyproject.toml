@@ -12,13 +12,15 @@ authors = [{name = 'Logikal GmbH', email = 'contact@logikal.io'}]
 keywords = ['development', 'virtual environment']
 classifiers = [
   'Development Status :: 5 - Production/Stable',
-  'Environment :: Console',
   'Intended Audience :: Developers',
   'License :: OSI Approved :: MIT License',
   'Operating System :: POSIX :: Linux',
   'Programming Language :: Python :: 3',
   'Programming Language :: Python :: 3.8',
+  'Environment :: Console',
   'Topic :: Software Development',
+  'Topic :: Utilities',
+  'Typing :: Typed',
 ]
 dynamic = ['version']
 
