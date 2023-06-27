@@ -6,7 +6,7 @@ on:
 jobs:
   publish-release:
     name: Publish release
-    uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v4
+    uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v5
     with:
       name: pyorbs
     permissions:
