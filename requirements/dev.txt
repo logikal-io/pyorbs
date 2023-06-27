@@ -1,4 +1,4 @@
 -r build.txt
 -r docs.txt
 
-pytest-logikal==1.6.0
+pytest-logikal==1.10.4
