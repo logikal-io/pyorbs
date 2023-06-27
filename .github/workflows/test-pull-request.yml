@@ -8,6 +8,7 @@ jobs:
     with:
       fetch-depth: 0  # needed for inferring the correct editable install version
       playbook-roles: fish
+      upload-artifacts: false
     permissions:
       contents: read
       id-token: write
