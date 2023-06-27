@@ -2,3 +2,4 @@
 --extra-index-url https://pypi.python.org/simple
 pip==23.0.0
 setuptools==67.2.0
+wheel==0.40.0
