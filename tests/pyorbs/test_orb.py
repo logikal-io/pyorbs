@@ -95,6 +95,13 @@ def test_make(
     assert (tmp_path / f'test_orb/bin/activate_orb.{current_shell_type()}').exists()
 
 
+def test_make_no_cache(
+    orb: OrbFixture, requirements: RequirementsFixture, tmp_requirements: RequirementsFixture,
+) -> None:
+    orb(['-m', 'test_orb', '--no-cache', '-r', tmp_requirements()])
+    assert_lockfiles_equal(tmp_requirements(lock=True), requirements(lock=True))  # check lockfile
+
+
 def test_make_empty(orb: OrbFixture, tmp_path: Path) -> None:
     process = orb(['-m', 'test_orb', '-e', 'python3', '--path', str(tmp_path / 'non_existent')])
     assert 'Making empty orb' in process.stdout
