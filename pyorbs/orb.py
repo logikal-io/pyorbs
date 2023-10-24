@@ -77,6 +77,7 @@ class Orb:
         parser.add_argument('--path', metavar='X', type=Path, default=default_path,
                             help='orb storage path (default: $XDG_DATA_HOME/pyorbs)')
         parser.add_argument('--no-cd', action='store_true', help='do not change directory')
+        parser.add_argument('--no-cache', action='store_true', help='do not use cache')
         parser.add_argument('--shell', action='store_true', help='activate the orb in a shell')
         parser.add_argument('--bare', action='store_true', help='use the bare requirements file')
 
@@ -192,7 +193,7 @@ class Orb:
         print('\n'.join(sorted(orbs)) or 'There are no orbs')
 
     @action(short='m')
-    def make(  # pylint: disable=too-many-arguments
+    def make(  # pylint: disable=too-many-arguments, too-many-locals
         self,
         name: Optional[str] = None,
         path: Optional[Path] = None,
@@ -240,11 +241,12 @@ class Orb:
 
         # Installing requirements
         if requirements:
+            cache = '--no-cache-dir' if self._args.no_cache else ''
             activate_orb = f'activate_orb.{current_shell_type()}'
             command = ' '.join([
                 f'source "{bin_dir / activate_orb}"',
-                '&& pip install --upgrade pip setuptools wheel',
-                f'&& pip install --upgrade --requirement "{requirements}"',
+                f'&& pip install {cache} --upgrade pip setuptools wheel',
+                f'&& pip install {cache} --upgrade --requirement "{requirements}"',
             ])
             if execute(command=command).returncode:
                 raise RuntimeError('Unable to install requirements')
