@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from shutil import copyfile
 from subprocess import CompletedProcess, run
-from typing import List, Optional, Protocol
+from typing import Protocol
 
 from pytest import FixtureRequest, fixture
 from pytest_mock import MockerFixture
@@ -13,7 +13,7 @@ SHELL = {shell: which(shell) for shell in SHELL_TYPES}
 
 
 class OrbFixture(Protocol):  # pylint: disable=too-few-public-methods
-    def __call__(self, args: List[str], check: bool = ...) -> 'CompletedProcess[str]':
+    def __call__(self, args: list[str], check: bool = ...) -> 'CompletedProcess[str]':
         """Protocol class for the orb fixture."""
 
 
@@ -24,7 +24,7 @@ def orb(mocker: MockerFixture, request: FixtureRequest, tmp_path: Path) -> OrbFi
         'PYORBS_DEFAULT_REQUIREMENTS': '',
     })
 
-    def run_orb(args: List[str], check: bool = True) -> 'CompletedProcess[str]':
+    def run_orb(args: list[str], check: bool = True) -> 'CompletedProcess[str]':
         run_args = ['python3', '-m', 'pyorbs']
         if '--path' not in args:
             run_args += ['--path', str(tmp_path)]
@@ -34,7 +34,7 @@ def orb(mocker: MockerFixture, request: FixtureRequest, tmp_path: Path) -> OrbFi
 
 
 class RequirementsFixture(Protocol):  # pylint: disable=too-few-public-methods
-    def __call__(self, version: str = ..., lock: bool = ..., path: Optional[Path] = ...) -> str:
+    def __call__(self, version: str = ..., lock: bool = ..., path: Path | None = ...) -> str:
         """Protocol class for the requirements fixture."""
 
 
@@ -43,7 +43,7 @@ def requirements() -> RequirementsFixture:
     def requirements_path(
         version: str = 'unchanged',
         lock: bool = False,
-        path: Optional[Path] = None,
+        path: Path | None = None,
     ) -> str:
         path = path or (Path(__file__).parent / 'requirements')
         return str(path / f'{version}.txt{".lock" if lock else ""}')
@@ -58,7 +58,7 @@ def tmp_requirements(
     def tmp_requirements_path(
         version: str = 'unchanged',
         lock: bool = False,
-        path: Optional[Path] = None,
+        path: Path | None = None,
     ) -> str:
         original = Path(requirements(version=version, lock=lock))
         return str(copyfile(original, (path or tmp_path) / original.name))

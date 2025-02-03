@@ -112,6 +112,6 @@ interactive shell (and thus a window) is always created, even when there is no o
 
 Command Completion
 ------------------
-You can install bash command completion by executing the following command::
+You can install Bash command completion by executing the following command::
 
-    $ orb --bash | sudo tee "$(pkg-config --variable=completionsdir bash-completion)/orb"
+    $ orb --bash > ~/.local/share/bash-completion/completions/orb"

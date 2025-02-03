@@ -4,9 +4,10 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from collections.abc import Callable, Sequence
 from importlib import metadata
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Sequence, Set, TypeVar, Union, cast
+from typing import Any, TypeVar, cast
 
 from pyorbs.requirements import Requirements
 from pyorbs.shell import SHELL_TYPES, current_shell_type, execute, which
@@ -17,9 +18,9 @@ ActionCallable = TypeVar('ActionCallable', bound=Callable[..., Any])
 
 
 class Action:  # pylint: disable=too-few-public-methods
-    REGISTRY: Dict[str, 'Action'] = {}
+    REGISTRY: dict[str, 'Action'] = {}
 
-    def __init__(self, method: ActionCallable, short: Optional[str] = None):
+    def __init__(self, method: ActionCallable, short: str | None = None):
         if not method.__doc__:
             raise RuntimeError(f'Action method "{method}" must have a docstring')
         self.doc = method.__doc__.strip().splitlines()[0].rstrip('.')
@@ -27,7 +28,7 @@ class Action:  # pylint: disable=too-few-public-methods
         self.flags = ([f'-{short}'] if short else []) + [f'--{method.__name__}']
 
 
-def action(short: Optional[str] = None) -> Callable[[ActionCallable], ActionCallable]:
+def action(short: str | None = None) -> Callable[[ActionCallable], ActionCallable]:
     def register_action(method: ActionCallable) -> ActionCallable:
         Action.REGISTRY[method.__name__] = Action(method=method, short=short)
         return method
@@ -37,9 +38,9 @@ def action(short: Optional[str] = None) -> Callable[[ActionCallable], ActionCall
 class Orb:
     def __init__(
         self,
-        args: Optional[Sequence[str]] = None,
-        default_requirements: Optional[Sequence[str]] = None,
-        default_path: Optional[Path] = None,
+        args: Sequence[str] | None = None,
+        default_requirements: list[str] | None = None,
+        default_path: Path | None = None,
     ):
         """
         Manage Python virtual environments.
@@ -54,7 +55,8 @@ class Orb:
         default_path = default_path or xdg_data_home / 'pyorbs'
         if default_requirements is None:
             config = os.environ.get('PYORBS_DEFAULT_REQUIREMENTS')
-            default_requirements = (
+            default_requirements = cast(
+                list[str],
                 DEFAULT_REQUIREMENTS if config is None
                 else (config.split(',') if config else [])
             )
@@ -82,37 +84,33 @@ class Orb:
         parser.add_argument('--bare', action='store_true', help='use the bare requirements file')
 
         self._args = parser.parse_args(args or [])
+        self._path = cast(Path, self._args.path.expanduser())
+        self._current_orb = os.getenv('PYORBS_CURRENT_ORB')
         self._default_requirements = [Path(requirement) for requirement in default_requirements]
-
-    def _path(self) -> Path:
-        return cast(Path, self._args.path).expanduser()
 
     def _name(self, use_current: bool = True, use_glowing: bool = True, check: bool = True) -> str:
         name = (
             self._args.name
-            or (self._current_orb() if use_current else None)
+            or (self._current_orb if use_current else None)
             or (self._glowing_orb() if use_glowing else None)
         )
         if not name:
             raise ValueError('The orb name must be specified')
+        if name.startswith('.'):
+            raise ValueError(f'Invalid orb name "{name}"')
         if check and name not in self._orbs():
             raise ValueError(f'Unknown orb name "{name}"')
         return name
 
-    @staticmethod
-    def _current_orb() -> Optional[str]:
-        return os.getenv('PYORBS_CURRENT_ORB')
-
-    def _orbs(self) -> Set[str]:
-        orb_path = self._path()
-        if orb_path.exists():
-            return set(path.stem for path in orb_path.iterdir() if path.is_dir())
+    def _orbs(self) -> set[str]:
+        if self._path.exists():
+            return set(path.stem for path in self._path.iterdir() if path.is_dir())
         return set()
 
     def _glowing_file(self) -> Path:
-        return self._path() / 'glowing'
+        return self._path / '.glowing'
 
-    def _glowing_orb(self) -> Optional[str]:
+    def _glowing_orb(self) -> str | None:
         glowing_file = self._glowing_file()
         return glowing_file.read_text() if glowing_file.exists() else None
 
@@ -122,7 +120,7 @@ class Orb:
                 return value
         return next(iter(Action.REGISTRY))
 
-    def _requirements(self, path: Optional[Path] = None) -> List[Requirements]:
+    def _requirements(self, path: Path | None = None) -> list[Requirements]:
         path = path or self._args.requirements
         if path and path.is_dir():  # pylint: disable=consider-ternary-expression
             requirements = [
@@ -136,6 +134,9 @@ class Orb:
             raise ValueError(f'There are no requirements files in path "{path}"')
         return requirements
 
+    def _executable(self) -> str | None:
+        return which(self._args.executable)
+
     def act(self) -> int:
         result = getattr(self, self._action())() or 0
         if isinstance(result, subprocess.CompletedProcess):
@@ -147,10 +148,11 @@ class Orb:
     @action(short='a')
     def activate(  # pylint: disable=too-many-arguments
         self,
-        name: Optional[str] = None,
-        path: Optional[Path] = None,
-        command: Optional[str] = None,
-        no_cd: Optional[bool] = None,
+        *,
+        name: str | None = None,
+        path: Path | None = None,
+        command: str | None = None,
+        no_cd: bool | None = None,
         capture: bool = False,
     ) -> 'subprocess.CompletedProcess[str]':
         """
@@ -165,7 +167,7 @@ class Orb:
 
         """
         name = name or self._name()
-        path = path or self._path()
+        path = path or self._path
         command = command or self._args.command
         init = path / name / f'bin/activate_orb.{current_shell_type()}'
         if not init.exists():
@@ -195,9 +197,10 @@ class Orb:
     @action(short='m')
     def make(  # pylint: disable=too-many-arguments, too-many-locals
         self,
-        name: Optional[str] = None,
-        path: Optional[Path] = None,
-        requirements_path: Optional[Path] = None,
+        *,
+        name: str | None = None,
+        path: Path | None = None,
+        requirements_path: Path | None = None,
         update: bool = False,
         quiet: bool = False,
     ) -> None:
@@ -205,7 +208,7 @@ class Orb:
         Make an orb.
         """
         name = name or self._name(use_current=update, use_glowing=update, check=update)
-        path = path or self._path()
+        path = path or self._path
         requirements = Requirements(
             path=requirements_path or self._args.requirements,
             default_paths=self._default_requirements,
@@ -213,8 +216,8 @@ class Orb:
             required=update,
             allow_outdated=update,
         )
+        executable = self._executable()
 
-        executable = which(self._args.executable)
         if not quiet:
             print(
                 f'{"Updating" if update else "Making"} orb "{name}" using "{requirements}"...'
@@ -241,12 +244,12 @@ class Orb:
 
         # Installing requirements
         if requirements:
-            cache = '--no-cache-dir' if self._args.no_cache else ''
+            cache_flag = '--no-cache-dir' if self._args.no_cache else ''
             activate_orb = f'activate_orb.{current_shell_type()}'
             command = ' '.join([
                 f'source "{bin_dir / activate_orb}"',
-                f'&& pip install {cache} --upgrade pip setuptools wheel',
-                f'&& pip install {cache} --upgrade --requirement "{requirements}"',
+                f'&& pip install {cache_flag} --upgrade pip setuptools wheel',
+                f'&& pip install {cache_flag} --upgrade --requirement "{requirements}"',
             ])
             if execute(command=command).returncode:
                 raise RuntimeError('Unable to install requirements')
@@ -274,16 +277,16 @@ class Orb:
         Destroy an orb.
         """
         name = self._name(use_current=False, use_glowing=False)
-        if self._current_orb() == name:
+        if self._current_orb == name:
             raise RuntimeError('The orb must be deactivated first for this operation')
         print(f'Destroying orb "{name}"...')
         if self._glowing_orb() == name:
             self._glowing_file().unlink(missing_ok=True)
             print('No orb shall glow now')
-        shutil.rmtree(self._path() / name)
+        shutil.rmtree(self._path / name)
 
     @action(short='f')
-    def freeze(self, path: Optional[Path] = None) -> None:
+    def freeze(self, path: Path | None = None) -> None:
         """
         Freeze requirements.
         """
@@ -296,6 +299,7 @@ class Orb:
                 print(requirements.status)
             else:
                 print(f'Freezing requirements "{requirements}"...')
+                print(f'Python executable: {self._executable()}')
                 with tempfile.TemporaryDirectory(prefix='pyorbs-') as tmp_path:
                     self.make(
                         name='frozen', path=Path(tmp_path), requirements_path=requirements.path,
@@ -303,7 +307,7 @@ class Orb:
                     )
 
     @action(short='t')
-    def test(self, path: Optional[Path] = None, quiet: bool = False) -> bool:
+    def test(self, path: Path | None = None, quiet: bool = False) -> bool:
         """
         Test requirements.
         """
@@ -328,7 +332,7 @@ class Orb:
         print('\n' + (outdated.strip() or 'All packages are up-to-date'))
 
     @action(short='g')
-    def glow(self, name: Optional[str] = None) -> None:
+    def glow(self, name: str | None = None) -> None:
         """
         Toggle orb glow.
         """
@@ -353,7 +357,7 @@ class Orb:
         print(render('orb-completion.bash').strip())
 
 
-def main(args: Sequence[str] = tuple(sys.argv[1:])) -> Union[int, str]:
+def main(args: Sequence[str] = tuple(sys.argv[1:])) -> int | str:
     try:
         return Orb(args=args).act()
     except KeyboardInterrupt:
