@@ -2,7 +2,6 @@ import os
 import re
 from pathlib import Path
 from subprocess import CompletedProcess
-from types import SimpleNamespace
 
 from pytest import MonkeyPatch, raises
 from pytest_mock import MockerFixture
@@ -66,7 +65,7 @@ def test_activate_execute(mocker: MockerFixture, tmp_path: Path) -> None:
 def test_activate_command(orb: OrbFixture, requirements: RequirementsFixture) -> None:
     orb(['-m', 'test_orb', '-r', requirements()])  # make
     assert 'test_orb' in orb(['test_orb', '-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # environment
-    assert 'pip 23.0' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
+    assert 'pip 25.0' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
 
 
 def test_activate_error() -> None:
@@ -140,7 +139,7 @@ def test_make_errors(
 
 
 def test_make_venv_error(mocker: MockerFixture, tmp_path: Path) -> None:
-    mocker.patch('pyorbs.orb.execute', return_value=SimpleNamespace(returncode=1))
+    mocker.patch('pyorbs.orb.execute', return_value=mocker.Mock(returncode=1))
     with raises(RuntimeError, match='Unable to create virtual environment'):
         Orb().make(name='test', path=tmp_path)
 
@@ -235,4 +234,5 @@ def test_session(orb: OrbFixture, tmp_requirements: RequirementsFixture) -> None
     orb(['test_orb'])  # activate
     assert 'test_orb' in orb(['-g', 'test_orb']).stdout
     assert 'No orb' in orb(['-d', 'test_orb']).stdout  # destroy
+    assert_error(orb(['.invalid'], check=False), match='Invalid orb name')
     assert_error(orb(['test_orb'], check=False), match='Unknown orb name')

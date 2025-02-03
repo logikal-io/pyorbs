@@ -1,7 +1,6 @@
 import hashlib
 import re
 from pathlib import Path
-from typing import List, Optional, Sequence
 
 from pyorbs.templates import render
 
@@ -12,7 +11,7 @@ class ProcessedRequirements:  # pylint: disable=too-few-public-methods
 
         # Derive current hash and options (including from dependencies)
         current_hash = hashlib.sha256()
-        options: List[str] = []
+        options: list[str] = []
         done = {path: False}
         while not all(done.values()):  # pylint: disable=while-used
             requirements = [entry for entry, processed in done.items() if not processed][0]
@@ -45,8 +44,9 @@ class ProcessedRequirements:  # pylint: disable=too-few-public-methods
 class Requirements:
     def __init__(  # pylint: disable=too-many-arguments
         self,
-        path: Optional[Path] = None,
-        default_paths: Optional[Sequence[Path]] = None,
+        path: Path | None = None,
+        *,
+        default_paths: list[Path] | None = None,
         bare: bool = False,
         required: bool = True,
         allow_outdated: bool = False,
@@ -66,11 +66,11 @@ class Requirements:
 
         """
         self.path = path or self._default_path(default_paths or [])
-        self.lockfile: Optional[Path] = None
+        self.lockfile: Path | None = None
         self.outdated = False
         self.changed = False
-        self._processed: Optional[ProcessedRequirements] = None
-        self._effective_path: Optional[Path] = None
+        self._processed: ProcessedRequirements | None = None
+        self._effective_path: Path | None = None
 
         if self.path:
             if not self.path.exists():
@@ -113,7 +113,7 @@ class Requirements:
         print(f'Frozen requirements are written to "{self.lockfile}"')
 
     @staticmethod
-    def _default_path(default_paths: Sequence[Path]) -> Optional[Path]:
+    def _default_path(default_paths: list[Path]) -> Path | None:
         for path in default_paths:
             if path.exists():
                 return path

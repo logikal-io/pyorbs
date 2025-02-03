@@ -2,7 +2,6 @@ import os
 import sys
 from pathlib import Path
 from subprocess import CompletedProcess, run
-from typing import Optional
 
 SHELL_TYPES = ('bash', 'fish')
 
@@ -11,7 +10,7 @@ def current_shell(default: str = 'bash') -> str:
     return os.environ.get('SHELL', which(default))
 
 
-def current_shell_type(shell: Optional[str] = None) -> str:
+def current_shell_type(shell: str | None = None) -> str:
     shell = shell or current_shell()
     for shell_type in SHELL_TYPES:
         if shell_type in shell:
@@ -20,8 +19,8 @@ def current_shell_type(shell: Optional[str] = None) -> str:
 
 
 def execute(
-    init: Optional[Path] = None,
-    command: Optional[str] = None,
+    init: Path | None = None,
+    command: str | None = None,
     replace: bool = False,
     capture: bool = False,
 ) -> 'CompletedProcess[str]':

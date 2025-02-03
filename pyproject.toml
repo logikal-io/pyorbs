@@ -6,7 +6,7 @@ build-backend = 'setuptools.build_meta'
 name = 'pyorbs'
 description = 'A tool for managing Python virtual environments'
 readme = 'README.rst'
-requires-python = '~= 3.8'
+requires-python = '~= 3.12'
 license = {file = 'LICENSE.txt'}
 authors = [{name = 'Logikal GmbH', email = 'contact@logikal.io'}]
 keywords = ['development', 'virtual environment']
@@ -16,7 +16,7 @@ classifiers = [
   'License :: OSI Approved :: MIT License',
   'Operating System :: POSIX :: Linux',
   'Programming Language :: Python :: 3',
-  'Programming Language :: Python :: 3.8',
+  'Programming Language :: Python :: 3.12',
   'Environment :: Console',
   'Topic :: Software Development',
   'Topic :: Utilities',
