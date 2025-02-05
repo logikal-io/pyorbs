@@ -12,4 +12,3 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    secrets: inherit
