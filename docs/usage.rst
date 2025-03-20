@@ -114,4 +114,4 @@ Command Completion
 ------------------
 You can install Bash command completion by executing the following command::
 
-    $ orb --bash > ~/.local/share/bash-completion/completions/orb"
+    $ orb --bash > ~/.local/share/bash-completion/completions/orb
