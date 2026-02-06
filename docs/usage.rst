@@ -68,20 +68,23 @@ lockfile as follows::
     $ orb -u magic
 
 This will re-create the ``magic`` orb (using ``requirements.txt`` or ``requirements/dev.txt`` by
-default) and trigger a re-generation of the requirements lockfile if the requirements changed. This
-includes changes to files that are further specified within the appropriate requirements files
-using the ``-r`` or ``-c`` options.
+default) and trigger a re-generation of the requirements lockfile.
+
+If you do not want to update the lockfile but simply want to make sure that your virtual
+environment is up-to-date, you can use the ``orb --sync`` or ``orb -s`` command::
+
+    $ orb -s magic
 
 .. tip:: You do not need to specify the orb name when you are already inside one – pyorbs will
     default to using the current orb for all actions when no orb is specified explicitly.
 
+In case you only want to generate or re-generate outdated lockfiles you can use the ``orb
+--freeze`` or ``orb -f`` command. You can also specify the Python executable with this command when
+necessary using the ``--executable`` or ``-e`` option. Finally, you can use the ``orb --test`` or
+``orb -t`` command for checking whether your lockfiles are up-to-date.
+
 .. note:: Whether a lockfile is outdated is assessed using a hash of the concatenated requirements
     and constraints files which is stored in the header of each lockfile.
-
-In case you only want to generate or re-generate lockfiles you can use the ``orb --freeze`` or
-``orb -f`` command. You can also specify the Python executable with this command when necessary
-using the ``--executable`` or ``-e`` option. Finally, you can use the ``orb --test`` or ``orb -t``
-command for checking whether your lockfiles are up-to-date.
 
 .. tip:: You can freeze or test multiple requirements files in one run by specifying a folder
     instead of a single file with the ``--requirements`` or ``-r`` option. This can be useful when

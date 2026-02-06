@@ -4,7 +4,7 @@ on: pull_request
 jobs:
   run-python-tests:
     name: Run Python tests
-    uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v10
+    uses: logikal-io/github-workflows/.github/workflows/python-run-tests.yml@v12
     with:
       fetch-depth: 0  # needed for inferring the correct editable install version
       playbook-roles: fish
