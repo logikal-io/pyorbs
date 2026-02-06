@@ -71,7 +71,7 @@ This will re-create the ``magic`` orb (using ``requirements.txt`` or ``requireme
 default) and trigger a re-generation of the requirements lockfile.
 
 If you do not want to update the lockfile but simply want to make sure that your virtual
-environment is up-to-date, you can use the ``sync`` command::
+environment is up-to-date, you can use the ``orb --sync`` or ``orb -s`` command::
 
     $ orb -s magic
 
