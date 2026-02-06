@@ -36,6 +36,9 @@ def action(short: str | None = None) -> Callable[[ActionCallable], ActionCallabl
 
 
 class Orb:
+    # See https://bugs.launchpad.net/ubuntu/+source/python-pip/+bug/1635463
+    FREEZE_COMMAND = 'pip freeze --all --exclude-editable | grep -v "pkg[-_]resources"'
+
     def __init__(
         self,
         args: Sequence[str] | None = None,
@@ -176,7 +179,7 @@ class Orb:
             print(f'Activating orb "{name}"...')
         if not command:
             self.glow(name=name)
-        if command and not capture:
+        if command and not capture:  # pragma: no cover, executed but missed by coverage
             print(f'Running "{command}"...')
 
         os.environ['PYORBS_NEW_SHELL'] = str(int(self._args.shell and not command))
@@ -202,6 +205,7 @@ class Orb:
         path: Path | None = None,
         requirements_path: Path | None = None,
         update: bool = False,
+        refresh_lockfile: bool = True,
         quiet: bool = False,
     ) -> None:
         """
@@ -216,11 +220,13 @@ class Orb:
             required=update,
             allow_outdated=update,
         )
+        requirements_path_str = str(requirements.path if refresh_lockfile else requirements or '')
         executable = self._executable()
 
         if not quiet:
+            action_str = 'Updating' if update else 'Making'
             print(
-                f'{"Updating" if update else "Making"} orb "{name}" using "{requirements}"...'
+                f'{action_str} orb "{name}" using "{requirements_path_str}"...'
                 if requirements else f'Making empty orb "{name}"'
             )
             print(f'Python executable: {executable}')
@@ -249,27 +255,52 @@ class Orb:
             command = ' '.join([
                 f'source "{bin_dir / activate_orb}"',
                 f'&& pip install {cache_flag} --upgrade pip setuptools wheel',
-                f'&& pip install {cache_flag} --upgrade --requirement "{requirements}"',
+                f'&& pip install {cache_flag} --upgrade --requirement "{requirements_path_str}"',
             ])
             if execute(command=command).returncode:
                 raise RuntimeError('Unable to install requirements')
 
             # Generating lockfile
-            if requirements.changed:
-                # See https://bugs.launchpad.net/ubuntu/+source/python-pip/+bug/1635463
-                freeze = 'pip freeze --all --exclude-editable | grep -v "pkg[-_]resources"'
-                process = self.activate(name=name, path=path, command=freeze, capture=True)
+            if refresh_lockfile or requirements.changed:
+                process = self.activate(
+                    name=name, path=path,
+                    command=self.FREEZE_COMMAND, capture=True,
+                )
                 requirements.update_lockfile(requirements=process.stdout)
 
         if not quiet:
             print(f'Orb "{name}" is ready for use')
+
+    @action(short='s')
+    def sync(self) -> None:
+        """
+        Synchronize an orb.
+        """
+        name = self._name(use_current=True, use_glowing=True, check=True)
+        path = self._path
+        requirements = Requirements(
+            path=self._args.requirements,
+            default_paths=self._default_requirements,
+            bare=False,
+            required=True,
+            allow_outdated=False,
+        )
+        if self._args.bare:
+            raise RuntimeError('Synchronization does not work with bare requirements')
+
+        print(f'Synchronizing orb "{name}" using "{requirements}"...')
+        process = self.activate(name=name, path=path, command=self.FREEZE_COMMAND, capture=True)
+        if not process.stdout.strip() == requirements.lockfile_packages:
+            self.make(name=name, path=path, update=True, refresh_lockfile=False, quiet=True)
+
+        print('Orb is up-to-date')
 
     @action(short='u')
     def update(self) -> None:
         """
         Update an orb.
         """
-        self.make(update=True)
+        self.make(update=True, refresh_lockfile=True)
 
     @action(short='d')
     def destroy(self) -> None:

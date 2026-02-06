@@ -48,7 +48,6 @@ def test_version(orb: OrbFixture) -> None:
 def test_activate(orb: OrbFixture, requirements: RequirementsFixture) -> None:
     orb(['-m', 'test_orb', '-r', requirements()])  # make
     orb(['test_orb'])  # activate
-    assert 'test_orb' in orb(['test_orb', '-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # environment
 
 
 def test_activate_execute(mocker: MockerFixture, tmp_path: Path) -> None:
@@ -65,7 +64,7 @@ def test_activate_execute(mocker: MockerFixture, tmp_path: Path) -> None:
 def test_activate_command(orb: OrbFixture, requirements: RequirementsFixture) -> None:
     orb(['-m', 'test_orb', '-r', requirements()])  # make
     assert 'test_orb' in orb(['test_orb', '-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # environment
-    assert 'pip 25.0' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
+    assert 'pip 26.0.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
 
 
 def test_activate_error() -> None:
@@ -142,6 +141,32 @@ def test_make_venv_error(mocker: MockerFixture, tmp_path: Path) -> None:
     mocker.patch('pyorbs.orb.execute', return_value=mocker.Mock(returncode=1))
     with raises(RuntimeError, match='Unable to create virtual environment'):
         Orb().make(name='test', path=tmp_path)
+
+
+def test_sync(orb: OrbFixture, tmp_requirements: RequirementsFixture) -> None:
+    tmp_requirements('unchanged', lock=True)  # copy lockfile
+    orb(['-m', 'test_orb'])
+    orb(['-s', 'test_orb', '-r', tmp_requirements('unchanged')])  # change, update executed
+    orb(['-s', 'test_orb', '-r', tmp_requirements('unchanged')])  # no change, update skipped
+    assert 'pip 26.0.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
+
+
+def test_sync_errors(orb: OrbFixture, requirements: RequirementsFixture) -> None:
+    orb(['-m', 'test_orb'])
+    assert_error(orb(
+        ['-s', 'test_orb', '--bare', '-r', requirements('unchanged')],
+        check=False,
+    ), match='does not work with bare requirements')
+    assert_error(orb(
+        ['-s', 'test_orb', '-r', requirements('changed')],
+        check=False,
+    ), match='lockfile of .* is outdated')
+
+
+def test_update(orb: OrbFixture, tmp_requirements: RequirementsFixture) -> None:
+    orb(['-m', 'test_orb'])
+    orb(['-u', 'test_orb', '-r', tmp_requirements('unchanged')])  # updates anyways
+    assert 'pip 26.0.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
 
 
 def test_update_errors(orb: OrbFixture) -> None:
@@ -228,6 +253,7 @@ def test_bash_completion(orb: OrbFixture) -> None:
 def test_session(orb: OrbFixture, tmp_requirements: RequirementsFixture) -> None:
     orb(['-f', '-r', tmp_requirements()])  # freeze
     orb(['-m', 'test_orb', '-r', tmp_requirements()])  # make
+    orb(['-s', 'test_orb', '-r', tmp_requirements()])  # sync
     orb(['-u', 'test_orb', '-r', tmp_requirements()])  # update
     assert 'test_orb' in orb(['-l']).stdout  # list
     assert 'test_orb' in orb(['test_orb', '-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # command
