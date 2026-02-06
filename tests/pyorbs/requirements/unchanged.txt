@@ -1,5 +1,5 @@
 -i https://pypi.python.org/simple
 --extra-index-url https://pypi.python.org/simple
-pip==25.0.0
-setuptools==75.8.0
-wheel==0.45.1
+pip==26.0.1
+setuptools==80.10.2
+wheel==0.46.3

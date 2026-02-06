@@ -15,14 +15,21 @@ def test_requirements(requirements: RequirementsFixture) -> None:
     assert not item.changed
 
     # Requirements file without lockfile
-    item = Requirements(Path(requirements('bare')))
+    item = Requirements(Path(requirements('no_lockfile')))
     assert not item.outdated
     assert item.changed
+    with raises(RuntimeError, match='does not have a lockfile'):
+        assert item.lockfile_packages
 
     # Requirements file with outdated lockfile
     item = Requirements(Path(requirements('changed')), allow_outdated=True)
+    packages = Path(requirements('changed', lock=True)).read_text(encoding='utf-8').strip()
     assert item.outdated
     assert item.changed
+    assert item.lockfile_packages == '\n'.join(
+        line for line in packages.splitlines()
+        if not line.startswith('#')
+    )
 
 
 def test_requirements_default_paths(requirements: RequirementsFixture) -> None:

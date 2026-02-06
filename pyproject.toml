@@ -1,5 +1,5 @@
 [build-system]
-requires = ['setuptools>=45', 'setuptools-scm[toml]>=6.2']
+requires = ['setuptools>=64', 'setuptools-scm>=8']
 build-backend = 'setuptools.build_meta'
 
 [project]
@@ -7,13 +7,12 @@ name = 'pyorbs'
 description = 'A tool for managing Python virtual environments'
 readme = 'README.rst'
 requires-python = '~= 3.12'
-license = {file = 'LICENSE.txt'}
+license = 'MIT'
 authors = [{name = 'Logikal GmbH', email = 'contact@logikal.io'}]
 keywords = ['development', 'virtual environment']
 classifiers = [
   'Development Status :: 5 - Production/Stable',
   'Intended Audience :: Developers',
-  'License :: OSI Approved :: MIT License',
   'Operating System :: POSIX :: Linux',
   'Programming Language :: Python :: 3',
   'Programming Language :: Python :: 3.12',
@@ -38,5 +37,5 @@ packages = ['pyorbs', 'pyorbs.templates']
 
 [tool.setuptools_scm]
 
-[tool.coverage.report]
-exclude_lines = ['\.\.\.']  # exclude abstract methods
+[tool.coverage.run]
+patch = ['subprocess']

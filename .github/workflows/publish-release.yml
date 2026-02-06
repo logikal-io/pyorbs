@@ -6,15 +6,15 @@ on:
 jobs:
   publish-release:
     name: Publish release
-    uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v10
+    uses: logikal-io/github-workflows/.github/workflows/python-publish-release.yml@v12
     with:
       name: pyorbs
       docs-workload-identity-provider: "projects/1092349290577/locations/global/\
                                         workloadIdentityPools/ci-cd/providers/github-actions"
-      docs-uploader-service-account: docs-uploader@docs-logikal-io.iam.gserviceaccount.com
-      docs-target-bucket: website-docs-logikal-io
-      docs-website-service-url-map: website-docs-logikal-io-service
-      docs-https-redirect-url-map: website-docs-logikal-io-https-redirect
+      docs-service-account-email: docs-publisher@docs-logikal-io.iam.gserviceaccount.com
+      docs-bucket-name: website-docs-logikal-io
+      docs-url-map-name: website-docs-logikal-io-service
+      docs-http-to-https-url-map-name: website-docs-logikal-io-http-to-https
     permissions:
       contents: read
       id-token: write

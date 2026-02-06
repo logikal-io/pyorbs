@@ -99,6 +99,15 @@ class Requirements:
             return f'Requirements lockfile of "{self.path}" is {status_text}'
         return f'Requirements file "{self.path}" does not have a lockfile'
 
+    @property
+    def lockfile_packages(self) -> str:
+        if not self.lockfile or not self.lockfile.exists():
+            raise RuntimeError(self.status)
+        return '\n'.join(
+            line for line in self.lockfile.read_text().strip().splitlines()
+            if not (line.startswith('#') or line.startswith('-'))
+        )
+
     def __bool__(self) -> bool:
         return self._effective_path is not None
 
