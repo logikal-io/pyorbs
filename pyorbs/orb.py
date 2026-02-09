@@ -205,7 +205,7 @@ class Orb:
         path: Path | None = None,
         requirements_path: Path | None = None,
         update: bool = False,
-        refresh_lockfile: bool = True,
+        refresh_lockfile: bool = False,
         quiet: bool = False,
     ) -> None:
         """
@@ -334,7 +334,7 @@ class Orb:
                 with tempfile.TemporaryDirectory(prefix='pyorbs-') as tmp_path:
                     self.make(
                         name='frozen', path=Path(tmp_path), requirements_path=requirements.path,
-                        update=True, quiet=True,
+                        update=True, refresh_lockfile=True, quiet=True,
                     )
 
     @action(short='t')
