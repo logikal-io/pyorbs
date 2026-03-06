@@ -12,9 +12,9 @@ jobs:
       docs-workload-identity-provider: "projects/1092349290577/locations/global/\
                                         workloadIdentityPools/ci-cd/providers/github-actions"
       docs-service-account-email: docs-publisher@docs-logikal-io.iam.gserviceaccount.com
-      docs-bucket-name: website-docs-logikal-io
-      docs-url-map-name: website-docs-logikal-io-service
-      docs-http-to-https-url-map-name: website-docs-logikal-io-http-to-https
+      docs-bucket-name: docs-service-docs-logikal-io
+      docs-url-map-name: docs-service
+      docs-http-to-https-url-map-name: docs-http-to-https
     permissions:
       contents: read
       id-token: write
