@@ -42,7 +42,7 @@ class ProcessedRequirements:  # pylint: disable=too-few-public-methods
 
 
 class Requirements:
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(
         self,
         path: Path | None = None,
         *,

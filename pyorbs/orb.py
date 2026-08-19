@@ -149,7 +149,7 @@ class Orb:
         return result
 
     @action(short='a')
-    def activate(  # pylint: disable=too-many-arguments
+    def activate(
         self,
         *,
         name: str | None = None,
