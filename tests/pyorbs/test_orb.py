@@ -64,7 +64,7 @@ def test_activate_execute(mocker: MockerFixture, tmp_path: Path) -> None:
 def test_activate_command(orb: OrbFixture, requirements: RequirementsFixture) -> None:
     orb(['-m', 'test_orb', '-r', requirements()])  # make
     assert 'test_orb' in orb(['test_orb', '-c', 'echo $PYORBS_CURRENT_ORB']).stdout  # environment
-    assert 'pip 26.0.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
+    assert 'pip 26.2.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
 
 
 def test_activate_error() -> None:
@@ -148,7 +148,7 @@ def test_sync(orb: OrbFixture, tmp_requirements: RequirementsFixture) -> None:
     orb(['-m', 'test_orb'])
     orb(['-s', 'test_orb', '-r', tmp_requirements('unchanged')])  # change, update executed
     orb(['-s', 'test_orb', '-r', tmp_requirements('unchanged')])  # no change, update skipped
-    assert 'pip 26.0.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
+    assert 'pip 26.2.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
 
 
 def test_sync_errors(orb: OrbFixture, requirements: RequirementsFixture) -> None:
@@ -166,7 +166,7 @@ def test_sync_errors(orb: OrbFixture, requirements: RequirementsFixture) -> None
 def test_update(orb: OrbFixture, tmp_requirements: RequirementsFixture) -> None:
     orb(['-m', 'test_orb'])
     orb(['-u', 'test_orb', '-r', tmp_requirements('unchanged')])  # updates anyways
-    assert 'pip 26.0.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
+    assert 'pip 26.2.1' in orb(['test_orb', '-c', 'pip --version']).stdout  # package
 
 
 def test_update_errors(orb: OrbFixture) -> None:
