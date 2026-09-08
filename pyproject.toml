@@ -9,7 +9,7 @@ readme = 'README.rst'
 requires-python = '~= 3.12'
 license = 'MIT'
 authors = [{name = 'Logikal GmbH', email = 'contact@logikal.io'}]
-keywords = ['development', 'virtual environment']
+keywords = ['python', 'development', 'virtual environment']
 classifiers = [
   'Development Status :: 5 - Production/Stable',
   'Intended Audience :: Developers',
